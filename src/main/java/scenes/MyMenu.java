@@ -27,7 +27,7 @@ public class MyMenu {
 
     void createHBox() {
         hbox = new HBox(20);
-        hbox.setPrefSize(1000,500);
+        hbox.setPrefSize(1000, 500);
         createLevelButton("Level1");
         createLevelButton("Level2");
         createLevelButton("Level3");
@@ -38,18 +38,18 @@ public class MyMenu {
 
     void createLevelButton(String name) {
         Button startLevel = new Button(name);
-        startLevel.setPrefSize(200,200);
+        startLevel.setPrefSize(200, 200);
 
         startLevel.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                if(name.equals("Level1")) {
+                if (name.equals("Level1")) {
                     Main.level1 = new Level1();
                     Main.stage.setScene(Main.level1.scene);
-                }else if(name.equals("Level2")) {
+                } else if (name.equals("Level2")) {
                     Main.level2 = new Level2();
                     Main.stage.setScene(Main.level2.scene);
-                }else if(name.equals("Level3")) {
+                } else if (name.equals("Level3")) {
                     Main.level3 = new Level3();
                     Main.stage.setScene(Main.level3.scene);
                 }

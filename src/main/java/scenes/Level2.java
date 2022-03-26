@@ -3,7 +3,7 @@ package scenes;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 
-public class Level2 extends Level{
+public class Level2 extends Level {
     final int WIDTH = 1366;
     final int Height = 768;
     public Scene scene;
