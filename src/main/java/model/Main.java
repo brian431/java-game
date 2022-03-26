@@ -13,9 +13,8 @@ public class Main extends Application {
     public static Stage stage;
     public static MyMenu menu = new MyMenu();
     public static Level1 level1;
-    public static Level2 level2;
+    public static Level2 level2;//dfdf
     public static Level3 level3;
-    // test for github 
 
     @Override
     public void start(Stage stage) throws IOException {
