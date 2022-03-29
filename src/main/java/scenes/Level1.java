@@ -33,7 +33,7 @@ public class Level1 extends Level {
         boss = new Level1Boss();
         setScene();
 
-
+        boss.startMoving();
         AnimationTimer mainTimer = new AnimationTimer() {
             @Override
             public void handle(long l) {
@@ -62,7 +62,7 @@ public class Level1 extends Level {
 
     public void update() {
         player.movePlayer();
-        boss.startMoving();
+        boss.moveY();
         boss.fireBullet();
     }
 }

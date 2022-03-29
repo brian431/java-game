@@ -10,8 +10,6 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.transform.Translate;
 import javafx.util.Duration;
 import scenes.Level1;
 
@@ -23,26 +21,26 @@ public class Player {
     public Image facingLeftImage = new Image("/cupheadFacingLeft.png");
 
     public int hp = 3;
+    public double playerWidth = 95.45;
+    public double playerHeight = 150;
     public int horizontalSpeed = 13;
     public int verticalSpeed = 7;
     public int jumpHeight = 37;
     public int dashLength = 360;
     public int dashLoop = 0;
-
     public boolean canjump = false;
     public boolean facingRight = true;
     public boolean canDash = true;
-
     public Timeline dashCd;
     public ImageView playerImageView;
-
+    int dashDuration = 200;
 
 
     public Player() {
 
         playerImageView = new ImageView(facingRightImage);
-        playerImageView.setFitHeight(150);
-        playerImageView.setFitWidth(95.45);
+        playerImageView.setFitHeight(playerHeight);
+        playerImageView.setFitWidth(playerWidth);
         playerImageView.setPreserveRatio(true);
     }
 
@@ -57,7 +55,7 @@ public class Player {
             if (playerImageView.getTranslateX() > horizontalSpeed) {
                 playerImageView.setTranslateX(playerImageView.getTranslateX() - horizontalSpeed);
             }
-            if (!canjump) {
+            if (!canjump && playerImageView.getTranslateX() > 3) {
                 playerImageView.setTranslateX(playerImageView.getTranslateX() - 3);
             }
         }
@@ -68,7 +66,7 @@ public class Player {
             if (playerImageView.getTranslateX() + playerImageView.getFitWidth() < Level1.WIDTH - horizontalSpeed) {
                 playerImageView.setTranslateX(playerImageView.getTranslateX() + horizontalSpeed);
             }
-            if (!canjump) {
+            if (!canjump && playerImageView.getTranslateX() + playerImageView.getFitWidth() < Level1.WIDTH - 3) {
                 playerImageView.setTranslateX(playerImageView.getTranslateX() + 3);
             }
         }
@@ -98,7 +96,6 @@ public class Player {
     }
 
 
-
     public void startDashCd() {
 
         dashCd = new Timeline(new KeyFrame(Duration.millis(700), new EventHandler<ActionEvent>() {
@@ -113,22 +110,16 @@ public class Player {
 
 
     public void dash() {
-        if(canDash) {
+        if (canDash) {
             canDash = false;
             boolean tempFace = facingRight;
-            if (tempFace) {
-                if (playerImageView.getTranslateX() + playerImageView.getFitWidth() <= Level1.WIDTH - dashLength) {
-                    TranslateTransition tt = new TranslateTransition(Duration.millis(200), playerImageView);
-                    tt.setByX(dashLength);
-                    tt.setInterpolator(Interpolator.LINEAR);
-                    tt.play();
-                }
-            } else if (playerImageView.getTranslateX() >= 10) {
-                TranslateTransition tt = new TranslateTransition(Duration.millis(200), playerImageView);
-                tt.setByX(-dashLength);
-                tt.setInterpolator(Interpolator.LINEAR);
-                tt.play();
-            }
+            int toWall = (int) (tempFace ? (Level1.WIDTH - playerImageView.getTranslateX() - playerWidth) : playerImageView.getTranslateX());
+            toWall = Math.min(toWall, dashLength);
+
+            TranslateTransition tt = new TranslateTransition(Duration.millis(dashDuration * toWall / dashLength), playerImageView);
+            tt.setByX(tempFace ? toWall : -toWall);
+            tt.setInterpolator(Interpolator.LINEAR);
+            tt.play();
 
             startDashCd();
         }
