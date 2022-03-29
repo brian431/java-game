@@ -25,15 +25,16 @@ public class Player {
     public double playerHeight = 150;
     public int horizontalSpeed = 13;
     public int verticalSpeed = 7;
-    public int jumpHeight = 37;
-    public int dashLength = 360;
+    public int jumpHeight = 38;
+    public int dashLength = 330;
     public int dashLoop = 0;
+    int dashDuration = 120;
     public boolean canjump = false;
     public boolean facingRight = true;
     public boolean canDash = true;
     public Timeline dashCd;
     public ImageView playerImageView;
-    int dashDuration = 200;
+
 
 
     public Player() {
