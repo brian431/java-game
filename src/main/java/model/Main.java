@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Main extends Application {
+
     public static Stage stage;
     public static MyMenu menu = new MyMenu();
     public static Level1 level1;

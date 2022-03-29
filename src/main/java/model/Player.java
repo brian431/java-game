@@ -1,7 +1,9 @@
 package model;
 
+import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -9,111 +11,128 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Translate;
 import javafx.util.Duration;
 import scenes.Level1;
 
 import static model.Main.level1;
 
 public class Player {
-    public static String STANDING = "-fx-background-color: transparent";//;-fx-background-image: url(/images/cuphead.png)
-    public int hp = 3;
-    public int horizontalSpeed = 5;
-    public int verticalSpeed = 7;
-    public int sprintLength = 2;
-    public int sprintLoop = 0;
-    public Timeline sprintCd;
-    public ImageView playerImage;
+
     public Image facingRightImage = new Image("/cuphead.png");
     public Image facingLeftImage = new Image("/cupheadFacingLeft.png");
-    public Rectangle hitbox;
-    boolean canjump = false;
-    boolean facingRight = true;
-    boolean canSprint = true;
+
+    public int hp = 3;
+    public int horizontalSpeed = 13;
+    public int verticalSpeed = 7;
+    public int jumpHeight = 37;
+    public int dashLength = 360;
+    public int dashLoop = 0;
+
+    public boolean canjump = false;
+    public boolean facingRight = true;
+    public boolean canDash = true;
+
+    public Timeline dashCd;
+    public ImageView playerImageView;
+
 
 
     public Player() {
-        hitbox = new Rectangle(500, 500);
-        hitbox.setStyle(STANDING);
-        playerImage = new ImageView(facingRightImage);
-        playerImage.setFitHeight(150);
-        playerImage.setFitWidth(95.45);
-        playerImage.setPreserveRatio(true);
 
-
-        sprintCd = new Timeline(new KeyFrame(Duration.millis(10), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                canSprint = false;
-                if (sprintLoop < 400) {
-                    sprint();
-                } else {
-                    if (sprintLoop == 800) {
-                        canSprint = true;
-                        sprintLoop = 0;
-                    }
-                }
-                sprintLoop += 10;
-            }
-        }));
-        sprintCd.setCycleCount(800);
-        //playerImage.setImage();
+        playerImageView = new ImageView(facingRightImage);
+        playerImageView.setFitHeight(150);
+        playerImageView.setFitWidth(95.45);
+        playerImageView.setPreserveRatio(true);
     }
 
     public void movePlayer() {
 
-        if (verticalSpeed < 17) verticalSpeed += 2;
+        if (verticalSpeed < 30) verticalSpeed += 2;
         moveY();
+
         if (Main.KeyCodes.getOrDefault(KeyCode.A, false) == true) {
             facingRight = false;
-            playerImage.setImage(facingLeftImage);
-            if (playerImage.getTranslateX() > horizontalSpeed) {
-                playerImage.setTranslateX(playerImage.getTranslateX() - 12);
+            playerImageView.setImage(facingLeftImage);
+            if (playerImageView.getTranslateX() > horizontalSpeed) {
+                playerImageView.setTranslateX(playerImageView.getTranslateX() - horizontalSpeed);
+            }
+            if (!canjump) {
+                playerImageView.setTranslateX(playerImageView.getTranslateX() - 3);
             }
         }
 
         if (Main.KeyCodes.getOrDefault(KeyCode.D, false) == true) {
             facingRight = true;
-            playerImage.setImage(facingRightImage);
-            if (playerImage.getTranslateX() + playerImage.getFitWidth() < Level1.WIDTH - horizontalSpeed) {
-                playerImage.setTranslateX(playerImage.getTranslateX() + 12);
+            playerImageView.setImage(facingRightImage);
+            if (playerImageView.getTranslateX() + playerImageView.getFitWidth() < Level1.WIDTH - horizontalSpeed) {
+                playerImageView.setTranslateX(playerImageView.getTranslateX() + horizontalSpeed);
+            }
+            if (!canjump) {
+                playerImageView.setTranslateX(playerImageView.getTranslateX() + 3);
             }
         }
 
         if (Main.KeyCodes.getOrDefault(KeyCode.SPACE, false) == true && canjump) {
             level1.label1.setText("hi");
-            verticalSpeed = -35;
+            verticalSpeed = -jumpHeight;
             canjump = false;
         }
 
         if (Main.KeyCodes.getOrDefault(KeyCode.SHIFT, false) == true) {
-            if (canSprint) sprintCd.play();
+            if (canDash) dash();
         }
     }
 
     public void moveY() {
-        //int temp = verticalSpeed;
+
         for (int i = 0; i < Math.abs(verticalSpeed); ++i) {
             for (Node standable : Main.standables) {
-                if (playerImage.getTranslateY() + playerImage.getFitHeight() == standable.getTranslateY() && verticalSpeed > 0) {
+                if (playerImageView.getTranslateY() + playerImageView.getFitHeight() == standable.getTranslateY() && verticalSpeed > 0) {
                     canjump = true;
                     return;
                 }
             }
-            playerImage.setTranslateY(playerImage.getTranslateY() + (verticalSpeed > 0 ? 1 : -1));
+            playerImageView.setTranslateY(playerImageView.getTranslateY() + (verticalSpeed > 0 ? 1 : -1));
         }
     }
 
-    public void sprint() {
-        boolean tempFace = facingRight;
-        for (int i = 0; i < sprintLength; i += 1) {
-            if (tempFace) {
-                if (playerImage.getTranslateX() + playerImage.getFitWidth() < Level1.WIDTH) {
-                    playerImage.setTranslateX(playerImage.getTranslateX() + 1);
-                }
-            } else if (playerImage.getTranslateX() > 0) {
-                playerImage.setTranslateX(playerImage.getTranslateX() - 1);
+
+
+    public void startDashCd() {
+
+        dashCd = new Timeline(new KeyFrame(Duration.millis(700), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                canDash = true;
             }
+        }));
+        dashCd.setCycleCount(1);
+        dashCd.play();
+    }
+
+
+    public void dash() {
+        if(canDash) {
+            canDash = false;
+            boolean tempFace = facingRight;
+            if (tempFace) {
+                if (playerImageView.getTranslateX() + playerImageView.getFitWidth() <= Level1.WIDTH - dashLength) {
+                    TranslateTransition tt = new TranslateTransition(Duration.millis(200), playerImageView);
+                    tt.setByX(dashLength);
+                    tt.setInterpolator(Interpolator.LINEAR);
+                    tt.play();
+                }
+            } else if (playerImageView.getTranslateX() >= 10) {
+                TranslateTransition tt = new TranslateTransition(Duration.millis(200), playerImageView);
+                tt.setByX(-dashLength);
+                tt.setInterpolator(Interpolator.LINEAR);
+                tt.play();
+            }
+
+            startDashCd();
         }
+
     }
 
 

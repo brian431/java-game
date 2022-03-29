@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
+import model.Level1Boss;
 import model.Main;
 import model.Player;
 
@@ -18,6 +19,7 @@ public class Level1 extends Level {
 
 
     Player player;
+    Level1Boss boss;
     Rectangle mainFloor;
 
 
@@ -26,7 +28,9 @@ public class Level1 extends Level {
         scene = new Scene(rootPane, WIDTH, Height);
         scene.setOnKeyPressed(keyEvent -> Main.KeyCodes.put(keyEvent.getCode(), true));
         scene.setOnKeyReleased(keyEvent -> Main.KeyCodes.put(keyEvent.getCode(), false));
+
         player = new Player();
+        boss = new Level1Boss();
         setScene();
 
 
@@ -41,15 +45,24 @@ public class Level1 extends Level {
     }
 
     void setScene() {
-        Node mainFloor = new Rectangle(0, 0, 1367, 68);
+
+        Node mainFloor = new Rectangle(0, 0, 1367, 168);
         rootPane.getChildren().add(mainFloor);
-        mainFloor.setTranslateY(700);
-        rootPane.getChildren().add(player.playerImage);
+        mainFloor.setTranslateY(668);
+
+        rootPane.getChildren().add(player.playerImageView);
+        rootPane.getChildren().add(boss.bossImageView);
+
+        boss.bossImageView.setTranslateX(1170);
+        boss.bossImageView.setTranslateY(360);
+
         Main.standables.add(mainFloor);
         rootPane.getChildren().add(label1);
     }
 
     public void update() {
         player.movePlayer();
+        boss.startMoving();
+        boss.fireBullet();
     }
 }
