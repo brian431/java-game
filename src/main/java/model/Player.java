@@ -14,6 +14,7 @@ import javafx.util.Duration;
 import scenes.Level1;
 
 import static model.Main.level1;
+import static model.Main.projectiles;
 
 public class Player {
 
@@ -28,10 +29,12 @@ public class Player {
     public int jumpHeight = 37;
     public int dashLength = 360;
     public int dashLoop = 0;
-    public boolean canjump = false;
+    public boolean canJump = false;
+    public boolean canShoot = true;
     public boolean facingRight = true;
     public boolean canDash = true;
     public Timeline dashCd;
+    public Timeline shootCd;
     public ImageView playerImageView;
     int dashDuration = 200;
 
@@ -49,36 +52,40 @@ public class Player {
         if (verticalSpeed < 30) verticalSpeed += 2;
         moveY();
 
-        if (Main.KeyCodes.getOrDefault(KeyCode.A, false) == true) {
+        if (Main.KeyCodes.getOrDefault(KeyCode.A, false) && !Main.KeyCodes.getOrDefault(KeyCode.W, false)) {
             facingRight = false;
             playerImageView.setImage(facingLeftImage);
             if (playerImageView.getTranslateX() > horizontalSpeed) {
                 playerImageView.setTranslateX(playerImageView.getTranslateX() - horizontalSpeed);
             }
-            if (!canjump && playerImageView.getTranslateX() > 3) {
+            if (!canJump && playerImageView.getTranslateX() > 3) {
                 playerImageView.setTranslateX(playerImageView.getTranslateX() - 3);
             }
         }
 
-        if (Main.KeyCodes.getOrDefault(KeyCode.D, false) == true) {
+        if (Main.KeyCodes.getOrDefault(KeyCode.D, false) && !Main.KeyCodes.getOrDefault(KeyCode.W, false)) {
             facingRight = true;
             playerImageView.setImage(facingRightImage);
             if (playerImageView.getTranslateX() + playerImageView.getFitWidth() < Level1.WIDTH - horizontalSpeed) {
                 playerImageView.setTranslateX(playerImageView.getTranslateX() + horizontalSpeed);
             }
-            if (!canjump && playerImageView.getTranslateX() + playerImageView.getFitWidth() < Level1.WIDTH - 3) {
+            if (!canJump && playerImageView.getTranslateX() + playerImageView.getFitWidth() < Level1.WIDTH - 3) {
                 playerImageView.setTranslateX(playerImageView.getTranslateX() + 3);
             }
         }
 
-        if (Main.KeyCodes.getOrDefault(KeyCode.SPACE, false) == true && canjump) {
+        if (Main.KeyCodes.getOrDefault(KeyCode.SPACE, false) && canJump) {
             level1.label1.setText("hi");
             verticalSpeed = -jumpHeight;
-            canjump = false;
+            canJump = false;
         }
 
-        if (Main.KeyCodes.getOrDefault(KeyCode.SHIFT, false) == true) {
+        if (Main.KeyCodes.getOrDefault(KeyCode.SHIFT, false)) {
             if (canDash) dash();
+        }
+
+        if (Main.KeyCodes.getOrDefault(KeyCode.J, false)) {
+            if (canShoot) shoot();
         }
     }
 
@@ -87,7 +94,7 @@ public class Player {
         for (int i = 0; i < Math.abs(verticalSpeed); ++i) {
             for (Node standable : Main.standables) {
                 if (playerImageView.getTranslateY() + playerImageView.getFitHeight() == standable.getTranslateY() && verticalSpeed > 0) {
-                    canjump = true;
+                    canJump = true;
                     return;
                 }
             }
@@ -126,5 +133,16 @@ public class Player {
 
     }
 
+    public void shoot() {
+        canShoot = false;
+        projectiles.add(new Projectile(facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2, facingRight, Main.KeyCodes.getOrDefault(KeyCode.W, false)));
+        shootCd = new Timeline(new KeyFrame(Duration.millis(300), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                canShoot = true;
+            }
+        }));
+        shootCd.play();
 
+    }
 }
