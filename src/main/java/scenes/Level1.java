@@ -41,7 +41,7 @@ public class Level1 extends Level {
         boss = new Level1Boss();
         setScene();
 
-        boss.startMoving();
+        boss.moveLeft();
         AnimationTimer mainTimer = new AnimationTimer() {
             @Override
             public void handle(long l) {
@@ -61,7 +61,7 @@ public class Level1 extends Level {
         rootPane.getChildren().add(player.playerImageView);
         rootPane.getChildren().add(boss.bossImageView);
 
-        boss.bossImageView.setTranslateX(1170);
+        boss.bossImageView.setTranslateX(WIDTH - boss.bossWidth);
         boss.bossImageView.setTranslateY(360);
 
         Main.standables.add(mainFloor);
