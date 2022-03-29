@@ -13,10 +13,9 @@ public class Level1Boss {
     public int bossWidth = 400;
     public int bossHeight = 200;
     public int verticalSpeed = 13;
-    public Image facingLeft= new Image("/Level1BossFacingLeft.png");
+    public Image facingLeft = new Image("/Level1BossFacingLeft.png");
     public Image facingRight = new Image("/Level1BossFacingRight.png");
     public ImageView bossImageView;
-
 
 
     public Level1Boss() {
@@ -33,9 +32,7 @@ public class Level1Boss {
         bulletTimeline.setCycleCount(8);
 
 
-
-
-        Timeline moveTimeline = new Timeline(new KeyFrame(Duration.millis(4000), new))
+        //Timeline moveTimeline = new Timeline(new KeyFrame(Duration.millis(4000), new))
     }
 
     public void startPhase1Cycle() {

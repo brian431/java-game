@@ -29,19 +29,18 @@ public class Player {
     public int jumpHeight = 38;
     public int dashLength = 330;
     public int dashLoop = 0;
-<<<<<<< HEAD
+
     public boolean canJump = false;
     public boolean canShoot = true;
-=======
+
     int dashDuration = 120;
     public boolean canjump = false;
->>>>>>> master
+
     public boolean facingRight = true;
     public boolean canDash = true;
     public Timeline dashCd;
     public Timeline shootCd;
     public ImageView playerImageView;
-
 
 
     public Player() {
