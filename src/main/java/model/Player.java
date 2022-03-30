@@ -28,16 +28,14 @@ public class Player {
     public int verticalSpeed = 7;
     public int jumpHeight = 38;
     public int dashLength = 330;
+    public int dashDuration = 120;
     public int dashLoop = 0;
 
     public boolean canJump = false;
     public boolean canShoot = true;
-
-    int dashDuration = 120;
-    public boolean canjump = false;
-
     public boolean facingRight = true;
     public boolean canDash = true;
+
     public Timeline dashCd;
     public Timeline shootCd;
     public ImageView playerImageView;
@@ -56,6 +54,7 @@ public class Player {
         if (verticalSpeed < 30) verticalSpeed += 2;
         moveY();
 
+        // Key A
         if (Main.KeyCodes.getOrDefault(KeyCode.A, false) && !Main.KeyCodes.getOrDefault(KeyCode.W, false)) {
             facingRight = false;
             playerImageView.setImage(facingLeftImage);
@@ -67,6 +66,7 @@ public class Player {
             }
         }
 
+        // Key D
         if (Main.KeyCodes.getOrDefault(KeyCode.D, false) && !Main.KeyCodes.getOrDefault(KeyCode.W, false)) {
             facingRight = true;
             playerImageView.setImage(facingRightImage);
@@ -78,16 +78,19 @@ public class Player {
             }
         }
 
+        // Key Space
         if (Main.KeyCodes.getOrDefault(KeyCode.SPACE, false) && canJump) {
             level1.label1.setText("hi");
             verticalSpeed = -jumpHeight;
             canJump = false;
         }
 
+        // Key Shift
         if (Main.KeyCodes.getOrDefault(KeyCode.SHIFT, false)) {
             if (canDash) dash();
         }
 
+        // Key J
         if (Main.KeyCodes.getOrDefault(KeyCode.J, false)) {
             if (canShoot) shoot();
         }
@@ -109,7 +112,7 @@ public class Player {
 
     public void startDashCd() {
 
-        dashCd = new Timeline(new KeyFrame(Duration.millis(700), new EventHandler<ActionEvent>() {
+        dashCd = new Timeline(new KeyFrame(Duration.millis(600), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 canDash = true;
@@ -137,9 +140,11 @@ public class Player {
 
     }
 
+
     public void shoot() {
+        /** Shoot one bullet and start a timer */
         canShoot = false;
-        projectiles.add(new Projectile(facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2, facingRight, Main.KeyCodes.getOrDefault(KeyCode.W, false)));
+        projectiles.add(new Projectile("playerBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2, facingRight, Main.KeyCodes.getOrDefault(KeyCode.W, false)));
         shootCd = new Timeline(new KeyFrame(Duration.millis(300), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
