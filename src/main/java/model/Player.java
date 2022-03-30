@@ -87,7 +87,7 @@ public class Player {
 
         // Key Shift
         if (Main.KeyCodes.getOrDefault(KeyCode.SHIFT, false)) {
-            if (canDash && (canJump || (!canJump && verticalSpeed > 0))) dash();
+            if (canDash) dash();
         }
 
         // Key J
