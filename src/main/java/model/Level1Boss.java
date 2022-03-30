@@ -6,9 +6,11 @@ import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
 import scenes.Level1;
 
@@ -228,7 +230,7 @@ public class Level1Boss {
 
     public void shoot() {
         if (!shooting) {
-            Projectile projectile = new Projectile("bossBullet", facingRight ? bossImageView.getTranslateX() + bossWidth : bossImageView.getTranslateX(), bossImageView.getTranslateY() + bossHeight / 2, facingRight, false);
+            Projectile projectile = new Projectile("bossBullet", facingRight ? bossImageView.getTranslateX() + bossWidth : bossImageView.getTranslateX(), bossImageView.getTranslateY() + bossHeight / 2, new Point2D(facingRight ? 1 : -1, 0));
             projectile.projectileImage.setImage(new Image("rock.png"));
             projectile.projectileImage.setPreserveRatio(false);
             projectile.projectileImage.setFitHeight(70);

@@ -6,6 +6,7 @@ import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -144,7 +145,7 @@ public class Player {
     public void shoot() {
         /** Shoot one bullet and start a timer */
         canShoot = false;
-        projectiles.add(new Projectile("playerBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2, facingRight, Main.KeyCodes.getOrDefault(KeyCode.W, false)));
+        projectiles.add(new Projectile("playerBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2, new Point2D(facingRight ? 1 : -1, Main.KeyCodes.getOrDefault(KeyCode.W, false) ? -1 : 0)));
         shootCd = new Timeline(new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
