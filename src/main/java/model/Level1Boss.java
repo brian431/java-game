@@ -16,7 +16,7 @@ public class Level1Boss {
     public int hp = 1000;
     public int maxHp = 2000;
     public int bossWidth = 400;
-    public int bossHeight = 200;
+    public int bossHeight = 250;
     public int verticalSpeed = 13;
     public int moveTime = 2000;
     public boolean facingRight = false;
@@ -31,38 +31,38 @@ public class Level1Boss {
 
     public Level1Boss() {
         bossImageView = new ImageView(facingLeftImage);
-        bossImageView.setFitHeight(200);
-        bossImageView.setFitWidth(400);
+        bossImageView.setFitHeight(bossHeight);
+        bossImageView.setFitWidth(bossWidth);
 
-        bulletTimeline = new Timeline(new KeyFrame(Duration.millis(500), new EventHandler<ActionEvent>() {
+        bulletTimeline = new Timeline(new KeyFrame(Duration.millis(800), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 fireBullet();
             }
         }));
-        bulletTimeline.setCycleCount(8);
+        bulletTimeline.setCycleCount(10);
 
 
         //Timeline moveTimeline = new Timeline(new KeyFrame(Duration.millis(4000), new))
     }
 
-    public void startPhase1Cycle() {
+    public Timeline getPhase1Cycle() {
         bulletTimeline.play();
-        KeyFrame moveLeftKF = new KeyFrame(Duration.millis(4000), new EventHandler<ActionEvent>() {
+        KeyFrame moveLeftKF = new KeyFrame(Duration.millis(8000), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 moveLeft();
             }
         });
 
-        KeyFrame shootKF = new KeyFrame(Duration.millis(8000), new EventHandler<ActionEvent>() {
+        KeyFrame shootKF = new KeyFrame(Duration.millis(12000), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 bulletTimeline.play();
             }
         });
 
-        KeyFrame moveRightKF = new KeyFrame(Duration.millis(12000), new EventHandler<ActionEvent>() {
+        KeyFrame moveRightKF = new KeyFrame(Duration.millis(20000), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 moveRight();
@@ -71,13 +71,14 @@ public class Level1Boss {
 
         Timeline tl = new Timeline();
         tl.getKeyFrames().addAll(moveLeftKF, shootKF, moveRightKF);
-        tl.play();
+        return tl;
     }
 
     public void fireBullet() {
         Projectile projectile = new Projectile("bossBullet", facingRight ? bossImageView.getTranslateX() + bossWidth : bossImageView.getTranslateX(), bossImageView.getTranslateY() + bossHeight / 2, facingRight,false);
-        projectile.projectileImage.setImage(new Image("/rock.png"));
-        projectile.projectileImage.resize(100, 100);
+        projectile.projectileImage.setImage(new Image("rock.png"));
+        projectile.projectileImage.setFitHeight(80);
+        projectile.projectileImage.setFitWidth(80);
 
         projectiles.add(projectile);
     }
