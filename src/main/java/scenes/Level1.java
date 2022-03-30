@@ -2,10 +2,6 @@ package scenes;
 
 import javafx.animation.AnimationTimer;
 import javafx.animation.Timeline;
-import javafx.beans.InvalidationListener;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -20,6 +16,9 @@ import model.Level1Boss;
 import model.Main;
 import model.Player;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import static model.Main.projectiles;
 
 public class Level1 extends Level {
@@ -28,10 +27,6 @@ public class Level1 extends Level {
     public Scene scene;
     public Pane rootPane;
     public Label label1 = new Label();
-
-    AnimationTimer mainTimer;
-    Timeline phase1Cycle;
-
     public Rectangle container;
     public Rectangle mainFloor;
     public Rectangle healthBar;
@@ -39,10 +34,10 @@ public class Level1 extends Level {
     public ImageView health2 = new ImageView(new Image("health.png"));
     public ImageView health3 = new ImageView(new Image("health.png"));
     public VBox healthes = new VBox();
-
     public Player player;
     public Level1Boss boss;
-
+    AnimationTimer mainTimer;
+    Timeline phase1Cycle;
 
 
     public Level1() {
@@ -112,6 +107,7 @@ public class Level1 extends Level {
         boss.moveY();
         boss.detectBullet();
         player.detectBullet();
+        boss.bossShooting();
         label1.setText("" + boss.bossImageView.getBoundsInParent());
 
         for (int i = 0; i < projectiles.size(); ++i) {
@@ -125,11 +121,12 @@ public class Level1 extends Level {
         }
 
         healthBar.setWidth(boss.hp);
-        if(healthes.getChildren().size() == 0) {
+        if (healthes.getChildren().size() == 0) {
 
+            Main.KeyCodes = new HashMap<>();
             Main.stage.setScene(Main.menu.scene);
             mainTimer.stop();
-            for(int i = 0; i < projectiles.size(); ++i) projectiles.remove(i);
+            Main.projectiles = new ArrayList<>();
             phase1Cycle.stop();
             Main.level1 = null;
         }

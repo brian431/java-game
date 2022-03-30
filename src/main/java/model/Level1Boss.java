@@ -1,12 +1,14 @@
 package model;
 
-import javafx.animation.*;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
 
 import static model.Main.projectiles;
@@ -19,7 +21,10 @@ public class Level1Boss {
     public int bossHeight = 250;
     public int verticalSpeed = 13;
     public int moveTime = 2000;
+
     public boolean facingRight = false;
+    public boolean canShoot = true;
+    public boolean shooting = false;
 
 
     public Image facingLeftImage = new Image("/Level1BossFacingLeft.png");
@@ -41,16 +46,16 @@ public class Level1Boss {
             }
         }));
         bulletTimeline.setCycleCount(10);
-
-
         //Timeline moveTimeline = new Timeline(new KeyFrame(Duration.millis(4000), new))
     }
 
     public Timeline getPhase1Cycle() {
-        bulletTimeline.play();
+        canShoot = true;
+
         KeyFrame moveLeftKF = new KeyFrame(Duration.millis(8000), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                canShoot = false;
                 moveLeft();
             }
         });
@@ -58,13 +63,14 @@ public class Level1Boss {
         KeyFrame shootKF = new KeyFrame(Duration.millis(12000), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                bulletTimeline.play();
+                canShoot = true;
             }
         });
 
         KeyFrame moveRightKF = new KeyFrame(Duration.millis(20000), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                canShoot = false;
                 moveRight();
             }
         });
@@ -75,7 +81,7 @@ public class Level1Boss {
     }
 
     public void fireBullet() {
-        Projectile projectile = new Projectile("bossBullet", facingRight ? bossImageView.getTranslateX() + bossWidth : bossImageView.getTranslateX(), bossImageView.getTranslateY() + bossHeight / 2, facingRight,false);
+        Projectile projectile = new Projectile("bossBullet", facingRight ? bossImageView.getTranslateX() + bossWidth : bossImageView.getTranslateX(), bossImageView.getTranslateY() + bossHeight / 2, facingRight, false);
         projectile.projectileImage.setImage(new Image("rock.png"));
         projectile.projectileImage.setFitHeight(80);
         projectile.projectileImage.setFitWidth(80);
@@ -136,12 +142,37 @@ public class Level1Boss {
     }
 
     public void detectBullet() {
-        for(int i = 0; i < Main.projectiles.size(); ++i) {
-            if(Main.projectiles.get(i).projectileImage.getBoundsInParent().intersects(bossImageView.getBoundsInParent()) && Main.projectiles.get(i).type.equals("playerBullet")) {
+        for (int i = 0; i < Main.projectiles.size(); ++i) {
+            if (Main.projectiles.get(i).projectileImage.getBoundsInParent().intersects(bossImageView.getBoundsInParent()) && Main.projectiles.get(i).type.equals("playerBullet")) {
                 Main.level1.rootPane.getChildren().remove(Main.projectiles.get(i).projectileImage);
                 Main.projectiles.remove(i);
                 hp -= 2;
             }
         }
     }
+
+    public void bossShooting() {
+        if (canShoot)
+            shoot();
+    }
+
+    public void shoot() {
+        if (!shooting) {
+            Projectile projectile = new Projectile("bossBullet", facingRight ? bossImageView.getTranslateX() + bossWidth : bossImageView.getTranslateX(), bossImageView.getTranslateY() + bossHeight / 2, facingRight, false);
+            projectile.projectileImage.setImage(new Image("rock.png"));
+            projectile.projectileImage.setFitHeight(80);
+            projectile.projectileImage.setFitWidth(80);
+
+            projectiles.add(projectile);
+            shooting = true;
+            Timeline shootCd = new Timeline(new KeyFrame(Duration.millis(800), new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    shooting = false;
+                }
+            }));
+            shootCd.play();
+        }
+    }
 }
+

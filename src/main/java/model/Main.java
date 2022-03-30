@@ -22,8 +22,6 @@ public class Main extends Application {
     public static Level3 level3;
 
     public static HashMap<KeyCode, Boolean> KeyCodes = new HashMap<>();
-    public static double mouseX;
-    public static double mouseY;
     public static ArrayList<Node> standables = new ArrayList<>();
     public static ArrayList<Projectile> projectiles = new ArrayList<>();
 

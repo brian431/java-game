@@ -88,7 +88,7 @@ public class Player {
 
         // Key Shift
         if (Main.KeyCodes.getOrDefault(KeyCode.SHIFT, false)) {
-            if (canDash) dash();
+            if (canDash && (canJump || (!canJump && verticalSpeed > 0))) dash();
         }
 
         // Key J
@@ -157,17 +157,17 @@ public class Player {
     }
 
     public void detectBullet() {
-        for(int i = 0; i < Main.projectiles.size(); ++i) {
-            if(Main.projectiles.get(i).projectileImage.getBoundsInParent().intersects(playerImageView.getBoundsInParent()) && Main.projectiles.get(i).type.equals("bossBullet")) {
+        for (int i = 0; i < Main.projectiles.size(); ++i) {
+            if (Main.projectiles.get(i).projectileImage.getBoundsInParent().intersects(playerImageView.getBoundsInParent()) && Main.projectiles.get(i).type.equals("bossBullet")) {
                 Main.level1.rootPane.getChildren().remove(Main.projectiles.get(i).projectileImage);
                 Main.projectiles.remove(i);
                 level1.healthes.getChildren().remove(level1.healthes.getChildren().size() - 1);
             }
         }
-        if(playerImageView.getBoundsInParent().intersects(level1.boss.bossImageView.getBoundsInParent()) && !invinsible) {
+        if (playerImageView.getBoundsInParent().intersects(level1.boss.bossImageView.getBoundsInParent()) && !invinsible) {
             level1.healthes.getChildren().remove(level1.healthes.getChildren().size() - 1);
             invinsible = true;
-            Timeline invinsibleTime= new Timeline(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
+            Timeline invinsibleTime = new Timeline(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     invinsible = false;
