@@ -11,9 +11,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
-import scenes.Level1;
+import scenes.Level;
 
-import static model.Main.level1;
 import static model.Main.projectiles;
 
 public class Player {
@@ -35,12 +34,13 @@ public class Player {
     public boolean canShoot = true;
     public boolean facingRight = true;
     public boolean canDash = true;
-    public boolean invinsible = false;
+    public boolean invincible = false;
 
     public Timeline dashCd;
     public Timeline shootCd;
     public ImageView playerImageView;
 
+    public Level myLevel;
 
     public Player() {
 
@@ -71,17 +71,16 @@ public class Player {
         if (Main.KeyCodes.getOrDefault(KeyCode.D, false) && !Main.KeyCodes.getOrDefault(KeyCode.W, false)) {
             facingRight = true;
             playerImageView.setImage(facingRightImage);
-            if (playerImageView.getTranslateX() + playerImageView.getFitWidth() < Level1.WIDTH - horizontalSpeed) {
+            if (playerImageView.getTranslateX() + playerImageView.getFitWidth() < Level.WIDTH - horizontalSpeed) {
                 playerImageView.setTranslateX(playerImageView.getTranslateX() + horizontalSpeed);
             }
-            if (!canJump && playerImageView.getTranslateX() + playerImageView.getFitWidth() < Level1.WIDTH - 3) {
+            if (!canJump && playerImageView.getTranslateX() + playerImageView.getFitWidth() < Level.WIDTH - 3) {
                 //playerImageView.setTranslateX(playerImageView.getTranslateX() + 3);
             }
         }
 
         // Key Space
         if (Main.KeyCodes.getOrDefault(KeyCode.SPACE, false) && canJump) {
-            level1.label1.setText("hi");
             verticalSpeed = -jumpHeight;
             canJump = false;
         }
@@ -128,7 +127,7 @@ public class Player {
         if (canDash) {
             canDash = false;
             boolean tempFace = facingRight;
-            int toWall = (int) (tempFace ? (Level1.WIDTH - playerImageView.getTranslateX() - playerWidth) : playerImageView.getTranslateX());
+            int toWall = (int) (tempFace ? (Level.WIDTH - playerImageView.getTranslateX() - playerWidth) : playerImageView.getTranslateX());
             toWall = Math.min(toWall, dashLength);
 
             TranslateTransition tt = new TranslateTransition(Duration.millis(dashDuration * toWall / dashLength), playerImageView);
@@ -146,7 +145,7 @@ public class Player {
         /** Shoot one bullet and start a timer */
         canShoot = false;
         projectiles.add(new Projectile("playerBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2, facingRight, Main.KeyCodes.getOrDefault(KeyCode.W, false)));
-        shootCd = new Timeline(new KeyFrame(Duration.millis(300), new EventHandler<ActionEvent>() {
+        shootCd = new Timeline(new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 canShoot = true;
@@ -156,24 +155,35 @@ public class Player {
 
     }
 
-    public void detectBullet() {
+    public void detectBadThings() {
+        /**
+         * check if player hits projectiles or the boss
+         *  if hit the boss, start invincible timer
+         */
+
         for (int i = 0; i < Main.projectiles.size(); ++i) {
             if (Main.projectiles.get(i).projectileImage.getBoundsInParent().intersects(playerImageView.getBoundsInParent()) && Main.projectiles.get(i).type.equals("bossBullet")) {
-                Main.level1.rootPane.getChildren().remove(Main.projectiles.get(i).projectileImage);
+                myLevel.rootPane.getChildren().remove(Main.projectiles.get(i).projectileImage);
                 Main.projectiles.remove(i);
-                level1.healthes.getChildren().remove(level1.healthes.getChildren().size() - 1);
+                myLevel.healthes.getChildren().remove(myLevel.healthes.getChildren().size() - 1);
             }
         }
-        if (playerImageView.getBoundsInParent().intersects(level1.boss.bossImageView.getBoundsInParent()) && !invinsible) {
-            level1.healthes.getChildren().remove(level1.healthes.getChildren().size() - 1);
-            invinsible = true;
-            Timeline invinsibleTime = new Timeline(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
+
+        if (playerImageView.getBoundsInParent().intersects(myLevel.bossHitbox.getBoundsInParent()) && !invincible) {
+            myLevel.healthes.getChildren().remove(myLevel.healthes.getChildren().size() - 1);
+            invincible = true;
+            Timeline invincibleTime = new Timeline(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
-                    invinsible = false;
+                    invincible = false;
                 }
             }));
-            invinsibleTime.play();
+            invincibleTime.play();
         }
+    }
+
+    public void update() {
+        detectBadThings();
+        movePlayer();
     }
 }

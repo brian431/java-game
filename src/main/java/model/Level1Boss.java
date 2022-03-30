@@ -11,21 +11,28 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
+import java.util.Random;
+
 import static model.Main.projectiles;
 
 public class Level1Boss {
 
     public int hp = 1000;
-    public int maxHp = 2000;
+    public int phase = 1;
     public int bossWidth = 400;
     public int bossHeight = 250;
     public int verticalSpeed = 13;
     public int moveTime = 2000;
+    public int bulletsPerRound = 10;
+    public int bulletsInterval = 650;
+    public int phase1CurrentTime = 0;
+
+    public Random random = new Random(System.currentTimeMillis());
 
     public boolean facingRight = false;
     public boolean canShoot = true;
     public boolean shooting = false;
-
+    public boolean phase1ing = false;
 
     public Image facingLeftImage = new Image("/Level1BossFacingLeft.png");
     public Image facingRightImage = new Image("/Level1BossFacingRight.png");
@@ -39,54 +46,54 @@ public class Level1Boss {
         bossImageView.setFitHeight(bossHeight);
         bossImageView.setFitWidth(bossWidth);
 
-        bulletTimeline = new Timeline(new KeyFrame(Duration.millis(800), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                fireBullet();
-            }
-        }));
-        bulletTimeline.setCycleCount(10);
-        //Timeline moveTimeline = new Timeline(new KeyFrame(Duration.millis(4000), new))
     }
 
-    public Timeline getPhase1Cycle() {
-        canShoot = true;
+    public void startPhase1Cycle() {
+        phase1CurrentTime = 0;
+        phase1ing = true;
 
-        KeyFrame moveLeftKF = new KeyFrame(Duration.millis(8000), new EventHandler<ActionEvent>() {
+        bulletsPerRound = random.nextInt(5) + 8;
+        canShoot = true;
+        phase1CurrentTime += bulletsPerRound * bulletsInterval;
+        KeyFrame moveLeftKF = new KeyFrame(Duration.millis(phase1CurrentTime), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 canShoot = false;
                 moveLeft();
+
             }
         });
+        phase1CurrentTime += moveTime * 2;
 
-        KeyFrame shootKF = new KeyFrame(Duration.millis(12000), new EventHandler<ActionEvent>() {
+        KeyFrame shootKF = new KeyFrame(Duration.millis(phase1CurrentTime), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 canShoot = true;
+
             }
         });
+        bulletsPerRound = random.nextInt(5) + 8;
+        phase1CurrentTime += bulletsPerRound * bulletsInterval;
 
-        KeyFrame moveRightKF = new KeyFrame(Duration.millis(20000), new EventHandler<ActionEvent>() {
+        KeyFrame moveRightKF = new KeyFrame(Duration.millis(phase1CurrentTime), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 canShoot = false;
                 moveRight();
             }
         });
+        phase1CurrentTime += moveTime * 2;
+
+        KeyFrame newKF = new KeyFrame(Duration.millis(phase1CurrentTime), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                phase1ing = false;
+            }
+        });
 
         Timeline tl = new Timeline();
-        tl.getKeyFrames().addAll(moveLeftKF, shootKF, moveRightKF);
-        return tl;
-    }
-
-    public void fireBullet() {
-        Projectile projectile = new Projectile("bossBullet", facingRight ? bossImageView.getTranslateX() + bossWidth : bossImageView.getTranslateX(), bossImageView.getTranslateY() + bossHeight / 2, facingRight, false);
-        projectile.projectileImage.setImage(new Image("rock.png"));
-        projectile.projectileImage.setFitHeight(80);
-        projectile.projectileImage.setFitWidth(80);
-
-        projectiles.add(projectile);
+        tl.getKeyFrames().addAll(moveLeftKF, shootKF, moveRightKF, newKF);
+        tl.play();
     }
 
     public void moveLeft() {
@@ -160,18 +167,27 @@ public class Level1Boss {
         if (!shooting) {
             Projectile projectile = new Projectile("bossBullet", facingRight ? bossImageView.getTranslateX() + bossWidth : bossImageView.getTranslateX(), bossImageView.getTranslateY() + bossHeight / 2, facingRight, false);
             projectile.projectileImage.setImage(new Image("rock.png"));
-            projectile.projectileImage.setFitHeight(80);
-            projectile.projectileImage.setFitWidth(80);
+            projectile.projectileImage.setFitHeight(100);
+            projectile.projectileImage.setFitWidth(100);
 
             projectiles.add(projectile);
             shooting = true;
-            Timeline shootCd = new Timeline(new KeyFrame(Duration.millis(800), new EventHandler<ActionEvent>() {
+            Timeline shootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval), new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
                     shooting = false;
                 }
             }));
             shootCd.play();
+        }
+    }
+
+    public void update() {
+        bossShooting();
+        detectBullet();
+        moveY();
+        if (phase == 1 && !phase1ing) {
+            startPhase1Cycle();
         }
     }
 }
