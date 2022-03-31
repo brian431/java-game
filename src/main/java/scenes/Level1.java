@@ -34,6 +34,8 @@ public class Level1 extends Level {
 
     public static int howManyBossToShow = 400;
 
+    public boolean playingLose = false;
+
     AnimationTimer mainTimer;
     Timeline phase1Cycle;
 
@@ -80,7 +82,7 @@ public class Level1 extends Level {
 
         rootPane.getChildren().add(label1);
 
-        container = new Rectangle(-200, -200, 2000, 1000);
+        container = new Rectangle(-200, -200, 2000, 1600);
         container.setFill(Color.TRANSPARENT);
         rootPane.getChildren().add(container);
     }
@@ -142,7 +144,8 @@ public class Level1 extends Level {
 
         player.update();
         boss.update();
-        label1.setText("" + projectiles.size());
+        //label1.setFont(new Font("Times New Roman", 200));
+        //label1.setText("" + player.verticalSpeed);
 
         /** add and remove projectiles*/
         for (int i = 0; i < projectiles.size(); ++i) {
@@ -159,13 +162,30 @@ public class Level1 extends Level {
 
 
         /** player dead */
-        if (healthes.getChildren().size() == 0) {
-
-            Main.KeyCodes = new HashMap<>();
-            Main.stage.setScene(Main.menu.scene);
+        if (healthes.getChildren().size() == 0 && !playingLose) {
+            startLoseAnimation();
+            playingLose = true;
             mainTimer.stop();
-            Main.projectiles = new ArrayList<>();
-            Main.level1 = null;
         }
+    }
+
+    public void startLoseAnimation() {
+        Label lose= new Label("YOU LOSE");
+        lose.setFont(new Font("Arial", 200));
+        lose.setTranslateX(200);
+        lose.setTranslateY(200);
+        rootPane.getChildren().add(lose);
+        Timeline tl = new Timeline(new KeyFrame(Duration.millis(2000), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                rootPane.getChildren().remove(lose);
+                Main.standables.remove(mainFloor);
+                Main.KeyCodes = new HashMap<>();
+                Main.projectiles = new ArrayList<>();
+                Main.level1 = null;
+                Main.stage.setScene(Main.menu.scene);
+            }
+        }));
+        tl.play();
     }
 }
