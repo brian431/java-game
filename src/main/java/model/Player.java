@@ -23,19 +23,26 @@ public class Player {
     public Image facingLeftImage = new Image("/cupheadFacingLeft.png");
 
     public int hp = 3;
+
+    public int weaponMode = 0;
+
     public double playerWidth = 95.45;
     public double playerHeight = 150;
     public int horizontalSpeed = 13;
+
     public int verticalSpeed = 7;
     public int jumpHeight = 38;
+
     public int dashLength = 330;
     public int dashDuration = 120;
-    public int dashLoop = 0;
+
+    public int bulletsInterval = 200;
 
     public boolean canJump = false;
     public boolean canShoot = true;
     public boolean facingRight = true;
     public boolean canDash = true;
+    public boolean canSwitchWeapon = true;
     public boolean invincible = false;
 
     public Timeline dashCd;
@@ -57,7 +64,7 @@ public class Player {
         if (verticalSpeed < 30) verticalSpeed += 2;
         moveY();
 
-        // Key A
+        /** Key A */
         if (Main.KeyCodes.getOrDefault(KeyCode.A, false) && !Main.KeyCodes.getOrDefault(KeyCode.W, false)) {
             facingRight = false;
             playerImageView.setImage(facingLeftImage);
@@ -69,7 +76,7 @@ public class Player {
             }
         }
 
-        // Key D
+        /** Key D */
         if (Main.KeyCodes.getOrDefault(KeyCode.D, false) && !Main.KeyCodes.getOrDefault(KeyCode.W, false)) {
             facingRight = true;
             playerImageView.setImage(facingRightImage);
@@ -81,20 +88,35 @@ public class Player {
             }
         }
 
-        // Key Space
+        /** Key Space */
         if (Main.KeyCodes.getOrDefault(KeyCode.SPACE, false) && canJump) {
             verticalSpeed = -jumpHeight;
             canJump = false;
         }
 
-        // Key Shift
+        /** Key Shift */
         if (Main.KeyCodes.getOrDefault(KeyCode.SHIFT, false)) {
             if (canDash) dash();
         }
 
-        // Key J
+        /** Key J */
         if (Main.KeyCodes.getOrDefault(KeyCode.J, false)) {
             if (canShoot) shoot();
+        }
+
+        /** Key R */
+        if(Main.KeyCodes.getOrDefault(KeyCode.R, false)) {
+            if(canSwitchWeapon) {
+                weaponMode = (weaponMode + 1) % 3;
+                canSwitchWeapon = false;
+                Timeline switchWeaponCd = new Timeline(new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        canSwitchWeapon = true;
+                    }
+                }));
+                switchWeaponCd.play();
+            }
         }
     }
 
@@ -149,15 +171,42 @@ public class Player {
     public void shoot() {
         /** Shoot one bullet and start a timer */
         canShoot = false;
-        projectiles.add(new Projectile("playerBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2, new Point2D(facingRight ? 1 : -1, Main.KeyCodes.getOrDefault(KeyCode.W, false) ? -1 : 0)));
-        shootCd = new Timeline(new KeyFrame(Duration.millis(150), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                canShoot = true;
-            }
-        }));
-        shootCd.play();
 
+
+        /** Normal gun **/
+        if(weaponMode == 0) {
+            projectiles.add(new Projectile("playerBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2, new Point2D(facingRight ? 1 : -1, Main.KeyCodes.getOrDefault(KeyCode.W, false) ? -1 : 0)));
+            shootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval), new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    canShoot = true;
+                }
+            }));
+        }
+
+        /** Shotgun */
+        else if(weaponMode == 1) {
+            projectiles.add(new ShotgunBullet("shotgunBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2, new Point2D(facingRight ? 1 : -1, Main.KeyCodes.getOrDefault(KeyCode.W, false) ? -1 : 0)));
+            shootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval), new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    canShoot = true;
+                }
+            }));
+        }
+
+        /** TrackingGun */
+        else if(weaponMode == 2) {
+            projectiles.add(new TrackBullet("trackBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2, new Point2D(facingRight ? 1 : -1, Main.KeyCodes.getOrDefault(KeyCode.W, false) ? -1 : 0)));
+            shootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval + 70), new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    canShoot = true;
+                }
+            }));
+        }
+
+        shootCd.play();
     }
 
     public void detectBadThings() {
@@ -168,15 +217,29 @@ public class Player {
 
         for (int i = 0; i < Main.projectiles.size(); ++i) {
             if (Main.projectiles.get(i).projectileImage.getBoundsInParent().intersects(playerImageView.getBoundsInParent()) && (Main.projectiles.get(i).type.equals("bossBullet") || Main.projectiles.get(i).type.equals("falling")))  {
+
+                myLevel.healthes.getChildren().remove(myLevel.healthes.getChildren().size() - 1);
                 myLevel.rootPane.getChildren().remove(Main.projectiles.get(i).projectileImage);
                 Main.projectiles.remove(i);
-                myLevel.healthes.getChildren().remove(myLevel.healthes.getChildren().size() - 1);
+
+                invincible = true;
+
+                Timeline invincibleTime = new Timeline(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        invincible = false;
+                    }
+                }));
+                invincibleTime.play();
             }
         }
 
         if (playerImageView.getBoundsInParent().intersects(myLevel.bossHitbox.getBoundsInParent()) && !invincible) {
+
             myLevel.healthes.getChildren().remove(myLevel.healthes.getChildren().size() - 1);
+
             invincible = true;
+
             Timeline invincibleTime = new Timeline(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent actionEvent) {
@@ -188,7 +251,7 @@ public class Player {
     }
 
     public void update() {
-        detectBadThings();
+        //detectBadThings();
         movePlayer();
     }
 }

@@ -31,16 +31,16 @@ public class Level1Boss {
     public int verticalSpeed = 13;
     public int moveTime = 2000;
 
-    public int bulletWidth = 120;
+    public int bulletWidth = 100;
     public int bulletHeight = 70;
     public int bulletsPerRound = 10;
-    public int bulletsInterval = 650;
-    public int timeBeforeMove = 700;
+    public int bulletsInterval = 550;
+    public int timeBeforeMove = 500;
     public int phaseCurrentTime = 0;
 
     public int rockHeight = 80;
     public int rockWidth = 80;
-    public int rockSpeed = 15;
+    public int rockSpeed = 25;
 
     public boolean facingRight = false;
     public boolean canShoot = true;
@@ -106,7 +106,14 @@ public class Level1Boss {
 
         phaseCurrentTime = 0;
         phaseing = true;
-        playReadyToMoveAnimation();
+        phaseCurrentTime += random.nextInt(3000);
+
+        KeyFrame readyToMoveKF = new KeyFrame(Duration.millis(phaseCurrentTime), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                playReadyToMoveAnimation();
+            }
+        });
         phaseCurrentTime += timeBeforeMove;
 
         KeyFrame moveKF = new KeyFrame(Duration.millis(phaseCurrentTime), new EventHandler<ActionEvent>() {
@@ -126,7 +133,7 @@ public class Level1Boss {
         });
 
         Timeline tl = new Timeline();
-        tl.getKeyFrames().addAll(moveKF, newKF);
+        tl.getKeyFrames().addAll(readyToMoveKF, moveKF, newKF);
         tl.play();
 
     }
@@ -189,10 +196,11 @@ public class Level1Boss {
 
     public void detectBullet() {
         for (int i = 0; i < Main.projectiles.size(); ++i) {
-            if (Main.projectiles.get(i).projectileImage.getBoundsInParent().intersects(bossImageView.getBoundsInParent()) && Main.projectiles.get(i).type.equals("playerBullet")) {
+            if (Main.projectiles.get(i).projectileImage.getBoundsInParent().intersects(bossImageView.getBoundsInParent()) &&
+                    (Main.projectiles.get(i).type.equals("playerBullet") || Main.projectiles.get(i).type.equals("shotgunBullet") || Main.projectiles.get(i).type.equals("trackBullet"))) {
                 Main.level1.rootPane.getChildren().remove(Main.projectiles.get(i).projectileImage);
                 Main.projectiles.remove(i);
-                hp -= 4;
+                hp -= 6;
             }
         }
     }
@@ -274,7 +282,7 @@ public class Level1Boss {
         bossShooting();
         detectBullet();
         moveY();
-        if(phase == 1 && hp == 500) phase = 0;
+        if(phase == 1 && hp <= 700) phase = 0;
 
         if (phase == 1 && !phaseing) {
             startPhase1Cycle();
