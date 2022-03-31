@@ -15,6 +15,7 @@ import javafx.util.Duration;
 import scenes.Level;
 
 import static model.Main.projectiles;
+import static model.Main.standables;
 
 public class Player {
 
@@ -100,11 +101,14 @@ public class Player {
     public void moveY() {
 
         for (int i = 0; i < Math.abs(verticalSpeed); ++i) {
-            for (Node standable : Main.standables) {
-                if (playerImageView.getTranslateY() + playerImageView.getFitHeight() == standable.getTranslateY() && verticalSpeed > 0) {
-                    canJump = true;
-                    return;
+            if(!standables.isEmpty()) {
+                for (Node standable : Main.standables) {
+                    if (playerImageView.getTranslateY() + playerImageView.getFitHeight() == standable.getTranslateY() && verticalSpeed > 0) {
+                        canJump = true;
+                        return;
+                    }
                 }
+
             }
             playerImageView.setTranslateY(playerImageView.getTranslateY() + (verticalSpeed > 0 ? 1 : -1));
         }
@@ -146,7 +150,7 @@ public class Player {
         /** Shoot one bullet and start a timer */
         canShoot = false;
         projectiles.add(new Projectile("playerBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2, new Point2D(facingRight ? 1 : -1, Main.KeyCodes.getOrDefault(KeyCode.W, false) ? -1 : 0)));
-        shootCd = new Timeline(new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
+        shootCd = new Timeline(new KeyFrame(Duration.millis(150), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 canShoot = true;
@@ -163,7 +167,7 @@ public class Player {
          */
 
         for (int i = 0; i < Main.projectiles.size(); ++i) {
-            if (Main.projectiles.get(i).projectileImage.getBoundsInParent().intersects(playerImageView.getBoundsInParent()) && Main.projectiles.get(i).type.equals("bossBullet")) {
+            if (Main.projectiles.get(i).projectileImage.getBoundsInParent().intersects(playerImageView.getBoundsInParent()) && (Main.projectiles.get(i).type.equals("bossBullet") || Main.projectiles.get(i).type.equals("falling")))  {
                 myLevel.rootPane.getChildren().remove(Main.projectiles.get(i).projectileImage);
                 Main.projectiles.remove(i);
                 myLevel.healthes.getChildren().remove(myLevel.healthes.getChildren().size() - 1);

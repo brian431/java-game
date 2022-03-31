@@ -10,8 +10,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import scenes.Level1;
 
@@ -22,23 +20,32 @@ import static model.Main.projectiles;
 
 public class Level1Boss {
 
+    public Random random = new Random(System.currentTimeMillis());
+
     public int hp = 1000;
     public int phase = 0;
+
     public int bossWidth = 450;
     public int bossHeight = 250;
+
     public int verticalSpeed = 13;
     public int moveTime = 2000;
+
+    public int bulletWidth = 120;
+    public int bulletHeight = 70;
     public int bulletsPerRound = 10;
     public int bulletsInterval = 650;
     public int timeBeforeMove = 700;
-    public int phase1CurrentTime = 0;
+    public int phaseCurrentTime = 0;
 
-    public Random random = new Random(System.currentTimeMillis());
+    public int rockHeight = 80;
+    public int rockWidth = 80;
+    public int rockSpeed = 15;
 
     public boolean facingRight = false;
     public boolean canShoot = true;
     public boolean shooting = false;
-    public boolean phase1ing = false;
+    public boolean phaseing = false;
     public boolean canThrowRock = true;
 
     public Image facingLeftImage = new Image("/Level1BossFacingLeft.png");
@@ -56,23 +63,23 @@ public class Level1Boss {
     }
 
     public void startPhase1Cycle() {
-        phase1CurrentTime = 0;
-        phase1ing = true;
+        phaseCurrentTime = 0;
+        phaseing = true;
 
         bulletsPerRound = random.nextInt(5) + 8;
         canShoot = true;
-        phase1CurrentTime += bulletsPerRound * bulletsInterval;
+        phaseCurrentTime += bulletsPerRound * bulletsInterval;
 
-        KeyFrame readyToMoveKF1 = new KeyFrame(Duration.millis(phase1CurrentTime), new EventHandler<ActionEvent>() {
+        KeyFrame readyToMoveKF1 = new KeyFrame(Duration.millis(phaseCurrentTime), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 canShoot = false;
                 playReadyToMoveAnimation();
             }
         });
-        phase1CurrentTime += timeBeforeMove;
+        phaseCurrentTime += timeBeforeMove;
 
-        KeyFrame moveKF = new KeyFrame(Duration.millis(phase1CurrentTime), new EventHandler<ActionEvent>() {
+        KeyFrame moveKF = new KeyFrame(Duration.millis(phaseCurrentTime), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 canShoot = false;
@@ -81,60 +88,51 @@ public class Level1Boss {
 
             }
         });
-        phase1CurrentTime += moveTime * 2;
+        phaseCurrentTime += moveTime * 2;
 
-        KeyFrame newKF = new KeyFrame(Duration.millis(phase1CurrentTime), new EventHandler<ActionEvent>() {
+        KeyFrame newKF = new KeyFrame(Duration.millis(phaseCurrentTime), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                phase1ing = false;
+                phaseing = false;
             }
         });
 
         Timeline tl = new Timeline();
-        tl.getKeyFrames().addAll(readyToMoveKF1, moveKF,newKF);
+        tl.getKeyFrames().addAll(readyToMoveKF1, moveKF, newKF);
         tl.play();
     }
 
     public void startPhase2Cycle() {
-        phase1ing = true;
-        bulletsPerRound = random.nextInt(5) + 8;
-        canShoot = true;
-        phase1CurrentTime += bulletsPerRound * bulletsInterval;
 
-        KeyFrame readyToMoveKF1 = new KeyFrame(Duration.millis(phase1CurrentTime), new EventHandler<ActionEvent>() {
+        phaseCurrentTime = 0;
+        phaseing = true;
+        playReadyToMoveAnimation();
+        phaseCurrentTime += timeBeforeMove;
+
+        KeyFrame moveKF = new KeyFrame(Duration.millis(phaseCurrentTime), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                canShoot = false;
-                playReadyToMoveAnimation();
-            }
-        });
-        phase1CurrentTime += timeBeforeMove;
-
-        KeyFrame moveKF = new KeyFrame(Duration.millis(phase1CurrentTime), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                canShoot = false;
                 if(!facingRight) moveLeft();
                 else moveRight();
-
             }
         });
-        phase1CurrentTime += moveTime * 2;
+        phaseCurrentTime += moveTime * 2;
 
-        KeyFrame newKF = new KeyFrame(Duration.millis(phase1CurrentTime), new EventHandler<ActionEvent>() {
+        KeyFrame newKF = new KeyFrame(Duration.millis(phaseCurrentTime), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                phase1ing = false;
+                phaseing = false;
             }
         });
 
         Timeline tl = new Timeline();
-        tl.getKeyFrames().addAll(readyToMoveKF1, moveKF,newKF);
+        tl.getKeyFrames().addAll(moveKF, newKF);
         tl.play();
+
     }
 
     public void moveLeft() {
-        facingRight = true;
+
         TranslateTransition tt = new TranslateTransition();
         tt.setDuration(Duration.millis(moveTime));
         tt.setNode(bossImageView);
@@ -148,13 +146,15 @@ public class Level1Boss {
                 bossImageView.setImage(facingRightImage);
                 tt.setByX(Level1.howManyBossToShow);
                 tt.play();
+                facingRight = true;
             }
         }));
         tl.play();
+
     }
 
     public void moveRight() {
-        facingRight = false;
+
         TranslateTransition tt = new TranslateTransition();
         tt.setDuration(Duration.millis(moveTime));
         tt.setNode(bossImageView);
@@ -168,9 +168,11 @@ public class Level1Boss {
                 bossImageView.setImage(facingLeftImage);
                 tt.setByX(-Level1.howManyBossToShow);
                 tt.play();
+                facingRight = false;
             }
         }));
         tl.play();
+
     }
 
     public void moveY() {
@@ -190,7 +192,7 @@ public class Level1Boss {
             if (Main.projectiles.get(i).projectileImage.getBoundsInParent().intersects(bossImageView.getBoundsInParent()) && Main.projectiles.get(i).type.equals("playerBullet")) {
                 Main.level1.rootPane.getChildren().remove(Main.projectiles.get(i).projectileImage);
                 Main.projectiles.remove(i);
-                hp -= 50;
+                hp -= 4;
             }
         }
     }
@@ -205,8 +207,8 @@ public class Level1Boss {
             Projectile projectile = new Projectile("bossBullet", facingRight ? bossImageView.getTranslateX() + bossWidth : bossImageView.getTranslateX(), bossImageView.getTranslateY() + bossHeight / 2, new Point2D(facingRight ? 1 : -1, 0));
             projectile.projectileImage.setImage(new Image("rock.png"));
             projectile.projectileImage.setPreserveRatio(false);
-            projectile.projectileImage.setFitHeight(70);
-            projectile.projectileImage.setFitWidth(70);
+            projectile.projectileImage.setFitHeight(bulletHeight);
+            projectile.projectileImage.setFitWidth(bulletWidth);
 
             projectiles.add(projectile);
             shooting = true;
@@ -225,7 +227,7 @@ public class Level1Boss {
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(timeBeforeMove), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                bossImageView.setImage(new Image(!facingRight ? "Level1BossFacingRight.png" : "Level1BossFacingLeft.png"));
+                bossImageView.setImage(new Image(facingRight ? "Level1BossFacingRight.png" : "Level1BossFacingLeft.png"));
             }
         }));
         tl.play();
@@ -245,35 +247,49 @@ public class Level1Boss {
 
 
     public void throwRock() {
-        Projectile rock = new Projectile("falling", level1.player.playerImageView.getTranslateX(), 0, new Point2D(0, 1));
-        rock.bulletSpeed = 7;
-        level1.rootPane.getChildren().add(rock.projectileImage);
-        projectiles.add(rock);
-        Timeline rockCd = new Timeline(new KeyFrame(Duration.millis(5000), new EventHandler<ActionEvent>() {
+        Timeline rockCd = new Timeline(new KeyFrame(Duration.millis(random.nextInt(2000) + 3000), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 canThrowRock = true;
             }
         }));
         rockCd.play();
+        Projectile rock = new Projectile("falling", level1.player.playerImageView.getTranslateX(), -30, new Point2D(0, 1));
+        rock.projectileImage.setFitHeight(rockHeight);
+        rock.projectileImage.setFitWidth(rockWidth);
+        rock.bulletSpeed = rockSpeed;
+        level1.rootPane.getChildren().add(rock.projectileImage);
+        Timeline show = new Timeline(new KeyFrame(Duration.millis(300), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+
+                projectiles.add(rock);
+            }
+        }));
+        show.play();
+
     }
 
     public void update() {
         bossShooting();
         detectBullet();
         moveY();
-        if(hp == 500) phase = 0;
+        if(phase == 1 && hp == 500) phase = 0;
 
-        if (phase == 1 && !phase1ing) {
+        if (phase == 1 && !phaseing) {
             startPhase1Cycle();
-        }else if(phase == 0 && !phase1ing) {
+        }else if(phase == 0 && !phaseing) {
+            canShoot = false;
             playTransformAnimation();
-        }else if(phase == 2 && !phase1ing) {
+        }else if(phase == 2 && !phaseing) {
+            canShoot = false;
             startPhase2Cycle();
-            if(canThrowRock) {
-                canThrowRock = false;
-                throwRock();
-            }
+
+        }
+
+        if(phase == 2 && canThrowRock) {
+            canThrowRock = false;
+            throwRock();
         }
     }
 }
