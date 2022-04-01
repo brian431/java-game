@@ -5,6 +5,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
@@ -144,16 +145,20 @@ public class Level1 extends Level {
 
         player.update();
         boss.update();
-        //label1.setFont(new Font("Times New Roman", 200));
-        //label1.setText("" + player.verticalSpeed);
+        label1.setFont(new Font("Times New Roman", 200));
+        label1.setText("" + player.weaponMode);
 
         /** add and remove projectiles*/
         for (int i = 0; i < projectiles.size(); ++i) {
+            if(projectiles.get(i).type == "trackBullet") {
+                projectiles.get(i).renewTarget(new Point2D(boss.bossImageView.getTranslateX() + boss.bossWidth / 2, boss.bossImageView.getTranslateY() + boss.bossHeight / 2));
+            }
             projectiles.get(i).move();
             if (!rootPane.getChildren().contains(projectiles.get(i).projectileImage)) {
                 rootPane.getChildren().add(projectiles.get(i).projectileImage);
             }
             if (!container.contains(projectiles.get(i).projectileImage.getTranslateX(), projectiles.get(i).projectileImage.getTranslateY())) {
+                rootPane.getChildren().remove(projectiles.get(i).projectileImage);
                 projectiles.remove(i);
             }
         }

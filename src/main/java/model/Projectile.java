@@ -12,7 +12,7 @@ public class Projectile {
     public String type;
 
 
-    public Projectile(String type, double X, double Y, Point2D vector ) {
+    public Projectile(String type, double X, double Y, Point2D vector) {
         this.type = type;
         projectileImage.setTranslateX(X);
         projectileImage.setFitHeight(9);
