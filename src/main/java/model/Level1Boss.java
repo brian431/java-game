@@ -23,7 +23,7 @@ public class Level1Boss {
     public Random random = new Random(System.currentTimeMillis());
 
     public int hp = 1000;
-    public int phase = 0;
+    public int phase = 1;
 
     public int bossWidth = 450;
     public int bossHeight = 250;

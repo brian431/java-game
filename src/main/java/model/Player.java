@@ -47,6 +47,10 @@ public class Player {
 
     public Timeline dashCd;
     public Timeline shootCd;
+    public Timeline shotgunShootCd;
+    public Timeline trackgunShootCd;
+    public Timeline invincibleCd;
+
     public ImageView playerImageView;
 
     public Level myLevel;
@@ -57,6 +61,42 @@ public class Player {
         playerImageView.setFitHeight(playerHeight);
         playerImageView.setFitWidth(playerWidth);
         playerImageView.setPreserveRatio(true);
+
+        dashCd = new Timeline(new KeyFrame(Duration.millis(600), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                canDash = true;
+            }
+        }));
+        dashCd.setCycleCount(1);
+
+        shootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                canShoot = true;
+            }
+        }));
+
+        trackgunShootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval + 80), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                canShoot = true;
+            }
+        }));
+
+        shotgunShootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                canShoot = true;
+            }
+        }));
+
+        invincibleCd= new Timeline(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                invincible = false;
+            }
+        }));
     }
 
     public void movePlayer() {
@@ -136,20 +176,6 @@ public class Player {
         }
     }
 
-
-    public void startDashCd() {
-
-        dashCd = new Timeline(new KeyFrame(Duration.millis(600), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                canDash = true;
-            }
-        }));
-        dashCd.setCycleCount(1);
-        dashCd.play();
-    }
-
-
     public void dash() {
         if (canDash) {
             canDash = false;
@@ -162,7 +188,7 @@ public class Player {
             tt.setInterpolator(Interpolator.LINEAR);
             tt.play();
 
-            startDashCd();
+            dashCd.play();
         }
 
     }
@@ -176,37 +202,20 @@ public class Player {
         /** Normal gun **/
         if(weaponMode == 0) {
             projectiles.add(new Projectile("playerBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2, new Point2D(facingRight ? 1 : -1, Main.KeyCodes.getOrDefault(KeyCode.W, false) ? -1 : 0)));
-            shootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval), new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    canShoot = true;
-                }
-            }));
+            shootCd.play();
         }
 
         /** Shotgun */
         else if(weaponMode == 1) {
             projectiles.add(new ShotgunBullet("shotgunBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2, new Point2D(facingRight ? 1 : -1, Main.KeyCodes.getOrDefault(KeyCode.W, false) ? -1 : 0)));
-            shootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval), new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    canShoot = true;
-                }
-            }));
+            shotgunShootCd.play();
         }
 
         /** TrackingGun */
         else if(weaponMode == 2) {
             projectiles.add(new TrackBullet("trackBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2, new Point2D(facingRight ? 1 : -1, Main.KeyCodes.getOrDefault(KeyCode.W, false) ? -1 : 0)));
-            shootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval + 70), new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    canShoot = true;
-                }
-            }));
+            trackgunShootCd.play();
         }
-
-        shootCd.play();
     }
 
     public void detectBadThings() {
@@ -223,14 +232,7 @@ public class Player {
                 Main.projectiles.remove(i);
 
                 invincible = true;
-
-                Timeline invincibleTime = new Timeline(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                        invincible = false;
-                    }
-                }));
-                invincibleTime.play();
+                invincibleCd.play();
             }
         }
 
@@ -240,18 +242,12 @@ public class Player {
 
             invincible = true;
 
-            Timeline invincibleTime = new Timeline(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    invincible = false;
-                }
-            }));
-            invincibleTime.play();
+            invincibleCd.play();
         }
     }
 
     public void update() {
-        //detectBadThings();
+        detectBadThings();
         movePlayer();
     }
 }
