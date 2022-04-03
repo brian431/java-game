@@ -84,7 +84,7 @@ public class Player {
             }
         }));
 
-        shotgunShootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval), new EventHandler<ActionEvent>() {
+        shotgunShootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval + 600), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 canShoot = true;

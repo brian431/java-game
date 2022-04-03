@@ -53,13 +53,39 @@ public class Level1Boss {
     public Image facingRightImage = new Image("/Level1BossFacingRight.png");
     public ImageView bossImageView;
 
-    Timeline bulletTimeline;
+    public Projectile rock;
+
+    public Timeline shootCd;
+    public Timeline showRock;
+    public Timeline rockCd;
 
 
     public Level1Boss() {
         bossImageView = new ImageView(facingLeftImage);
         bossImageView.setFitHeight(bossHeight);
         bossImageView.setFitWidth(bossWidth);
+
+        shootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                shooting = false;
+            }
+        }));
+
+        showRock = new Timeline(new KeyFrame(Duration.millis(300), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+
+                projectiles.add(rock);
+            }
+        }));
+
+        rockCd = new Timeline(new KeyFrame(Duration.millis(random.nextInt(2000) + 3000), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                canThrowRock = true;
+            }
+        }));
 
     }
 
@@ -221,12 +247,6 @@ public class Level1Boss {
 
             projectiles.add(projectile);
             shooting = true;
-            Timeline shootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval), new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    shooting = false;
-                }
-            }));
             shootCd.play();
         }
     }
@@ -256,26 +276,15 @@ public class Level1Boss {
 
 
     public void throwRock() {
-        Timeline rockCd = new Timeline(new KeyFrame(Duration.millis(random.nextInt(2000) + 3000), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                canThrowRock = true;
-            }
-        }));
+
         rockCd.play();
-        Projectile rock = new Projectile("falling", level1.player.playerImageView.getTranslateX(), -30, new Point2D(0, 1));
+        rock = new Projectile("falling", level1.player.playerImageView.getTranslateX(), -30, new Point2D(0, 1));
         rock.projectileImage.setFitHeight(rockHeight);
         rock.projectileImage.setFitWidth(rockWidth);
         rock.bulletSpeed = rockSpeed;
         level1.rootPane.getChildren().add(rock.projectileImage);
-        Timeline show = new Timeline(new KeyFrame(Duration.millis(300), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
 
-                projectiles.add(rock);
-            }
-        }));
-        show.play();
+        showRock.play();
 
     }
 
