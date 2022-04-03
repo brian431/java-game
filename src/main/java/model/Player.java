@@ -206,7 +206,7 @@ public class Player {
 
         /** Normal gun **/
         if (weaponMode == 0) {
-            projectiles.add(new Projectile("playerBullet", Main.KeyCodes.getOrDefault(KeyCode.D, false) ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2,
+            projectiles.add(new Projectile("playerBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2,
                     new Point2D((Main.KeyCodes.getOrDefault(KeyCode.D, false) || Main.KeyCodes.getOrDefault(KeyCode.A, false)) || !Main.KeyCodes.getOrDefault(KeyCode.W, false) ? (facingRight ? 1 : -1) : 0, Main.KeyCodes.getOrDefault(KeyCode.W, false) ? -1 : 0)));
             shootCd.play();
         }
@@ -214,7 +214,7 @@ public class Player {
         /** Shotgun */
         else if (weaponMode == 1) {
             for (int degree = -24; degree <= 24; degree += 12)
-                projectiles.add(new ShotgunBullet("shotgunBullet", Main.KeyCodes.getOrDefault(KeyCode.D, false) ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2,
+                projectiles.add(new ShotgunBullet("shotgunBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2,
                         new Point2D((Main.KeyCodes.getOrDefault(KeyCode.D, false) || Main.KeyCodes.getOrDefault(KeyCode.A, false)) || !Main.KeyCodes.getOrDefault(KeyCode.W, false) ? (facingRight ? 1 : -1) : 0, Main.KeyCodes.getOrDefault(KeyCode.W, false) ? Math.tan(Math.toRadians(degree)) - 1 : Math.tan(Math.toRadians(degree)))));
             shotgunShootCd.play();
         }
@@ -223,7 +223,7 @@ public class Player {
 
         /** TrackingGun */
         else if (weaponMode == 2) {
-            projectiles.add(new TrackBullet("trackBullet", Main.KeyCodes.getOrDefault(KeyCode.D, false) ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2,
+            projectiles.add(new TrackBullet("trackBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2,
                     new Point2D((Main.KeyCodes.getOrDefault(KeyCode.D, false) || Main.KeyCodes.getOrDefault(KeyCode.A, false)) || !Main.KeyCodes.getOrDefault(KeyCode.W, false) ? (facingRight ? 1 : -1) : 0, Main.KeyCodes.getOrDefault(KeyCode.W, false) ? -1 : 0)));
             trackgunShootCd.play();
         }
