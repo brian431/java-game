@@ -207,8 +207,8 @@ public class Player {
 
         /** Shotgun */
         else if(weaponMode == 1) {
-            for(int i = -40 ; i <= 40 ; i+=20)
-                projectiles.add(new ShotgunBullet("shotgunBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2, new Point2D(facingRight ? 1 : -1, Main.KeyCodes.getOrDefault(KeyCode.W, false) ? Math.tan(Math.toRadians(i))-1: Math.tan(Math.toRadians(i)))));
+            for(int degree = -40 ; degree <= 40 ; degree+=20)
+                projectiles.add(new ShotgunBullet("shotgunBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2, new Point2D(facingRight ? 1 : -1, Main.KeyCodes.getOrDefault(KeyCode.W, false) ? Math.tan(Math.toRadians(degree))-1: Math.tan(Math.toRadians(degree)))));
             shotgunShootCd.play();
         }
 
