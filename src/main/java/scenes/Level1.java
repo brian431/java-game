@@ -25,16 +25,13 @@ import static model.Main.projectiles;
 
 public class Level1 extends Level {
 
+    public static int howManyBossToShow = 400;
     public Scene scene;
     public Label label1 = new Label();
     public Rectangle container;
     public Rectangle mainFloor;
-
     public Player player;
     public Level1Boss boss;
-
-    public static int howManyBossToShow = 400;
-
     public boolean playingLose = false;
 
     AnimationTimer mainTimer;
@@ -150,7 +147,7 @@ public class Level1 extends Level {
 
         /** add and remove projectiles*/
         for (int i = 0; i < projectiles.size(); ++i) {
-            if(projectiles.get(i).type == "trackBullet") {
+            if (projectiles.get(i).type == "trackBullet") {
                 projectiles.get(i).renewTarget(new Point2D(boss.bossImageView.getTranslateX() + boss.bossWidth / 2, boss.bossImageView.getTranslateY() + boss.bossHeight / 2));
             }
             projectiles.get(i).move();
@@ -175,7 +172,7 @@ public class Level1 extends Level {
     }
 
     public void startLoseAnimation() {
-        Label lose= new Label("YOU LOSE");
+        Label lose = new Label("YOU LOSE");
         lose.setFont(new Font("Arial", 200));
         lose.setTranslateX(200);
         lose.setTranslateY(200);

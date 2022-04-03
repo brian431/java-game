@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
+import scenes.Level;
 import scenes.Level1;
 
 import java.util.Random;
@@ -83,7 +84,7 @@ public class Level1Boss {
             @Override
             public void handle(ActionEvent actionEvent) {
                 canShoot = false;
-                if(!facingRight) moveLeft();
+                if (!facingRight) moveLeft();
                 else moveRight();
 
             }
@@ -119,7 +120,7 @@ public class Level1Boss {
         KeyFrame moveKF = new KeyFrame(Duration.millis(phaseCurrentTime), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                if(!facingRight) moveLeft();
+                if (!facingRight) moveLeft();
                 else moveRight();
             }
         });
@@ -143,7 +144,7 @@ public class Level1Boss {
         TranslateTransition tt = new TranslateTransition();
         tt.setDuration(Duration.millis(moveTime));
         tt.setNode(bossImageView);
-        tt.setByX(-Main.level1.WIDTH - bossWidth + Level1.howManyBossToShow);
+        tt.setByX(-Level.WIDTH - bossWidth + Level1.howManyBossToShow);
         tt.setInterpolator(Interpolator.EASE_OUT);
         tt.setCycleCount(1);
         tt.play();
@@ -165,7 +166,7 @@ public class Level1Boss {
         TranslateTransition tt = new TranslateTransition();
         tt.setDuration(Duration.millis(moveTime));
         tt.setNode(bossImageView);
-        tt.setByX(level1.WIDTH + bossWidth - Level1.howManyBossToShow);
+        tt.setByX(Level.WIDTH + bossWidth - Level1.howManyBossToShow);
         tt.setInterpolator(Interpolator.EASE_OUT);
         tt.setCycleCount(1);
         tt.play();
@@ -282,20 +283,20 @@ public class Level1Boss {
         bossShooting();
         detectBullet();
         moveY();
-        if(phase == 1 && hp <= 700) phase = 0;
+        if (phase == 1 && hp <= 700) phase = 0;
 
         if (phase == 1 && !phaseing) {
             startPhase1Cycle();
-        }else if(phase == 0 && !phaseing) {
+        } else if (phase == 0 && !phaseing) {
             canShoot = false;
             playTransformAnimation();
-        }else if(phase == 2 && !phaseing) {
+        } else if (phase == 2 && !phaseing) {
             canShoot = false;
             startPhase2Cycle();
 
         }
 
-        if(phase == 2 && canThrowRock) {
+        if (phase == 2 && canThrowRock) {
             canThrowRock = false;
             throwRock();
         }

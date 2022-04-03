@@ -16,10 +16,10 @@ public class ShotgunBullet extends Projectile {
         projectileImage.setFitHeight(9);
         projectileImage.setFitWidth(30);
         projectileImage.setTranslateY(Y);
-        if(vector.getY() < 0)
-            projectileImage.setRotate(-vector.angle(vector.distance(0,0),0));
+        if (vector.getY() < 0)
+            projectileImage.setRotate(-vector.angle(vector.distance(0, 0), 0));
         else
-            projectileImage.setRotate(vector.angle(vector.distance(0,0),0));
+            projectileImage.setRotate(vector.angle(vector.distance(0, 0), 0));
         this.vector = vector;
     }
 }
