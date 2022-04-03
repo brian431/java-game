@@ -77,7 +77,6 @@ public class Player {
         }));
 
 
-
         trackgunShootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval + 200), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -109,7 +108,7 @@ public class Player {
         if (Main.KeyCodes.getOrDefault(KeyCode.A, false)) {
             facingRight = false;
             playerImageView.setImage(facingLeftImage);
-            if(!Main.KeyCodes.getOrDefault(KeyCode.W, false)) {
+            if (!Main.KeyCodes.getOrDefault(KeyCode.W, false)) {
                 if (playerImageView.getTranslateX() > horizontalSpeed) {
                     playerImageView.setTranslateX(playerImageView.getTranslateX() - horizontalSpeed);
                 }
@@ -123,7 +122,7 @@ public class Player {
         if (Main.KeyCodes.getOrDefault(KeyCode.D, false)) {
             facingRight = true;
             playerImageView.setImage(facingRightImage);
-            if(!Main.KeyCodes.getOrDefault(KeyCode.W, false)) {
+            if (!Main.KeyCodes.getOrDefault(KeyCode.W, false)) {
                 if (playerImageView.getTranslateX() + playerImageView.getFitWidth() < Level.WIDTH - horizontalSpeed) {
                     playerImageView.setTranslateX(playerImageView.getTranslateX() + horizontalSpeed);
                 }
@@ -215,7 +214,7 @@ public class Player {
         else if (weaponMode == 1) {
             for (int degree = -24; degree <= 24; degree += 12)
                 projectiles.add(new ShotgunBullet("shotgunBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2,
-                        new Point2D((Main.KeyCodes.getOrDefault(KeyCode.D, false) || Main.KeyCodes.getOrDefault(KeyCode.A, false)) || !Main.KeyCodes.getOrDefault(KeyCode.W, false) ? (facingRight ? 1 : -1) : 0, Main.KeyCodes.getOrDefault(KeyCode.W, false) ? Math.tan(Math.toRadians(degree)) - 1 : Math.tan(Math.toRadians(degree)))));
+                        new Point2D((Main.KeyCodes.getOrDefault(KeyCode.D, false) || Main.KeyCodes.getOrDefault(KeyCode.A, false)) || !Main.KeyCodes.getOrDefault(KeyCode.W, false) ? (facingRight ? 1 : -1) : Math.cos(Math.toRadians(90 + degree)) / Math.sin(Math.toRadians(90 + degree)), Main.KeyCodes.getOrDefault(KeyCode.W, false) ? Math.tan(Math.toRadians(degree)) - 1 : Math.tan(Math.toRadians(degree)))));
             shotgunShootCd.play();
         }
 
