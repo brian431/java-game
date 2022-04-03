@@ -24,7 +24,7 @@ public class Level1Boss {
     public Random random = new Random(System.currentTimeMillis());
 
     public int hp = 1000;
-    public int phase = 1;
+    public int phase = 0;
 
     public int bossWidth = 450;
     public int bossHeight = 250;
@@ -292,7 +292,7 @@ public class Level1Boss {
         bossShooting();
         detectBullet();
         moveY();
-        if (phase == 1 && hp <= 700) phase = 0;
+        if (phase == 1 && hp <= 500) phase = 0;
 
         if (phase == 1 && !phaseing) {
             startPhase1Cycle();

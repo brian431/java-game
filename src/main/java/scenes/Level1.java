@@ -108,6 +108,7 @@ public class Level1 extends Level {
             }
         }));
         tl.play();
+
         Timeline tl2 = new Timeline(new KeyFrame(Duration.millis(2000), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
