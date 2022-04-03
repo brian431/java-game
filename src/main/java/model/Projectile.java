@@ -18,7 +18,10 @@ public class Projectile {
         projectileImage.setFitHeight(9);
         projectileImage.setFitWidth(30);
         projectileImage.setTranslateY(Y);
-        projectileImage.setRotate(-vector.angle(1,0));
+        if(vector.getY() < 0)
+            projectileImage.setRotate(-vector.angle(vector.distance(0,0),0));
+        else
+            projectileImage.setRotate(vector.angle(vector.distance(0,0),0));
         this.vector = vector;
 
     }
@@ -30,7 +33,14 @@ public class Projectile {
     }
 
     public void renewTarget(Point2D a){
-        projectileImage.setRotate(-new Point2D(a.getX()-projectileImage.getTranslateX() , a.getY()-projectileImage.getTranslateY()).angle(1,0));
+
+        //renew angle
+        if(a.getY() > 0)
+            projectileImage.setRotate(new Point2D(a.getX()-projectileImage.getTranslateX() , a.getY()-projectileImage.getTranslateY()).angle(a.distance(0,0),0));
+        else
+            projectileImage.setRotate(-new Point2D(a.getX()-projectileImage.getTranslateX() , a.getY()-projectileImage.getTranslateY()).angle(a.distance(0,0),0));
+
+        //renew vector
         this.vector = new Point2D(a.getX()-projectileImage.getTranslateX() , a.getY()-projectileImage.getTranslateY());
     }
 }

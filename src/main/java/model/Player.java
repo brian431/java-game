@@ -207,7 +207,8 @@ public class Player {
 
         /** Shotgun */
         else if(weaponMode == 1) {
-            projectiles.add(new ShotgunBullet("shotgunBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2, new Point2D(facingRight ? 1 : -1, Main.KeyCodes.getOrDefault(KeyCode.W, false) ? -1 : 0)));
+            for(int i = -40 ; i <= 40 ; i+=20)
+                projectiles.add(new ShotgunBullet("shotgunBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2, new Point2D(facingRight ? 1 : -1, Main.KeyCodes.getOrDefault(KeyCode.W, false) ? Math.tan(Math.toRadians(i))-1: Math.tan(Math.toRadians(i)))));
             shotgunShootCd.play();
         }
 
@@ -227,7 +228,7 @@ public class Player {
         for (int i = 0; i < Main.projectiles.size(); ++i) {
             if (Main.projectiles.get(i).projectileImage.getBoundsInParent().intersects(playerImageView.getBoundsInParent()) && (Main.projectiles.get(i).type.equals("bossBullet") || Main.projectiles.get(i).type.equals("falling")))  {
 
-                myLevel.healthes.getChildren().remove(myLevel.healthes.getChildren().size() - 1);
+                //myLevel.healthes.getChildren().remove(myLevel.healthes.getChildren().size() - 1);
                 myLevel.rootPane.getChildren().remove(Main.projectiles.get(i).projectileImage);
                 Main.projectiles.remove(i);
 
@@ -238,7 +239,7 @@ public class Player {
 
         if (playerImageView.getBoundsInParent().intersects(myLevel.bossHitbox.getBoundsInParent()) && !invincible) {
 
-            myLevel.healthes.getChildren().remove(myLevel.healthes.getChildren().size() - 1);
+            //myLevel.healthes.getChildren().remove(myLevel.healthes.getChildren().size() - 1);
 
             invincible = true;
 
