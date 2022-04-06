@@ -21,7 +21,6 @@ public class Player {
 
     public Image facingRightImage = new Image("/cuphead.png");
     public Image facingLeftImage = new Image("/cupheadFacingLeft.png");
-
     public int hp = 3;
 
     public int weaponMode = 0;
@@ -77,21 +76,22 @@ public class Player {
             }
         }));
 
-        trackgunShootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval + 80), new EventHandler<ActionEvent>() {
+
+        trackgunShootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval + 200), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 canShoot = true;
             }
         }));
 
-        shotgunShootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval), new EventHandler<ActionEvent>() {
+        shotgunShootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval + 400), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 canShoot = true;
             }
         }));
 
-        invincibleCd= new Timeline(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
+        invincibleCd = new Timeline(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 invincible = false;
@@ -105,26 +105,30 @@ public class Player {
         moveY();
 
         /** Key A */
-        if (Main.KeyCodes.getOrDefault(KeyCode.A, false) && !Main.KeyCodes.getOrDefault(KeyCode.W, false)) {
+        if (Main.KeyCodes.getOrDefault(KeyCode.A, false)) {
             facingRight = false;
             playerImageView.setImage(facingLeftImage);
-            if (playerImageView.getTranslateX() > horizontalSpeed) {
-                playerImageView.setTranslateX(playerImageView.getTranslateX() - horizontalSpeed);
-            }
-            if (!canJump && playerImageView.getTranslateX() > 3) {
-                //playerImageView.setTranslateX(playerImageView.getTranslateX() - 3);
+            if (!Main.KeyCodes.getOrDefault(KeyCode.W, false)) {
+                if (playerImageView.getTranslateX() > horizontalSpeed) {
+                    playerImageView.setTranslateX(playerImageView.getTranslateX() - horizontalSpeed);
+                }
+                if (!canJump && playerImageView.getTranslateX() > 3) {
+                    //playerImageView.setTranslateX(playerImageView.getTranslateX() - 3);
+                }
             }
         }
 
         /** Key D */
-        if (Main.KeyCodes.getOrDefault(KeyCode.D, false) && !Main.KeyCodes.getOrDefault(KeyCode.W, false)) {
+        if (Main.KeyCodes.getOrDefault(KeyCode.D, false)) {
             facingRight = true;
             playerImageView.setImage(facingRightImage);
-            if (playerImageView.getTranslateX() + playerImageView.getFitWidth() < Level.WIDTH - horizontalSpeed) {
-                playerImageView.setTranslateX(playerImageView.getTranslateX() + horizontalSpeed);
-            }
-            if (!canJump && playerImageView.getTranslateX() + playerImageView.getFitWidth() < Level.WIDTH - 3) {
-                //playerImageView.setTranslateX(playerImageView.getTranslateX() + 3);
+            if (!Main.KeyCodes.getOrDefault(KeyCode.W, false)) {
+                if (playerImageView.getTranslateX() + playerImageView.getFitWidth() < Level.WIDTH - horizontalSpeed) {
+                    playerImageView.setTranslateX(playerImageView.getTranslateX() + horizontalSpeed);
+                }
+                if (!canJump && playerImageView.getTranslateX() + playerImageView.getFitWidth() < Level.WIDTH - 3) {
+                    //playerImageView.setTranslateX(playerImageView.getTranslateX() + 3);
+                }
             }
         }
 
@@ -145,8 +149,8 @@ public class Player {
         }
 
         /** Key R */
-        if(Main.KeyCodes.getOrDefault(KeyCode.R, false)) {
-            if(canSwitchWeapon) {
+        if (Main.KeyCodes.getOrDefault(KeyCode.R, false)) {
+            if (canSwitchWeapon) {
                 weaponMode = (weaponMode + 1) % 3;
                 canSwitchWeapon = false;
                 Timeline switchWeaponCd = new Timeline(new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
@@ -163,7 +167,7 @@ public class Player {
     public void moveY() {
 
         for (int i = 0; i < Math.abs(verticalSpeed); ++i) {
-            if(!standables.isEmpty()) {
+            if (!standables.isEmpty()) {
                 for (Node standable : Main.standables) {
                     if (playerImageView.getTranslateY() + playerImageView.getFitHeight() == standable.getTranslateY() && verticalSpeed > 0) {
                         canJump = true;
@@ -200,20 +204,25 @@ public class Player {
 
 
         /** Normal gun **/
-        if(weaponMode == 0) {
-            projectiles.add(new Projectile("playerBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2, new Point2D(facingRight ? 1 : -1, Main.KeyCodes.getOrDefault(KeyCode.W, false) ? -1 : 0)));
+        if (weaponMode == 0) {
+            projectiles.add(new Projectile("playerBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2,
+                    new Point2D((Main.KeyCodes.getOrDefault(KeyCode.D, false) || Main.KeyCodes.getOrDefault(KeyCode.A, false)) || !Main.KeyCodes.getOrDefault(KeyCode.W, false) ? (facingRight ? 1 : -1) : 0, Main.KeyCodes.getOrDefault(KeyCode.W, false) ? -1 : 0)));
             shootCd.play();
         }
 
         /** Shotgun */
-        else if(weaponMode == 1) {
-            projectiles.add(new ShotgunBullet("shotgunBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2, new Point2D(facingRight ? 1 : -1, Main.KeyCodes.getOrDefault(KeyCode.W, false) ? -1 : 0)));
+        else if (weaponMode == 1) {
+            for (int degree = -24; degree <= 24; degree += 12)
+                projectiles.add(new ShotgunBullet("shotgunBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2,
+                        new Point2D((Main.KeyCodes.getOrDefault(KeyCode.D, false) || Main.KeyCodes.getOrDefault(KeyCode.A, false)) || !Main.KeyCodes.getOrDefault(KeyCode.W, false) ? (facingRight ? 1 : -1) : Math.cos(Math.toRadians(90 + degree)) / Math.sin(Math.toRadians(90 + degree)), Main.KeyCodes.getOrDefault(KeyCode.W, false) ? (Main.KeyCodes.getOrDefault(KeyCode.D, false) || Main.KeyCodes.getOrDefault(KeyCode.A, false) ? Math.tan(Math.toRadians(degree)) - 1 : -1) : Math.tan(Math.toRadians(degree)))));
             shotgunShootCd.play();
         }
 
+
         /** TrackingGun */
-        else if(weaponMode == 2) {
-            projectiles.add(new TrackBullet("trackBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2, new Point2D(facingRight ? 1 : -1, Main.KeyCodes.getOrDefault(KeyCode.W, false) ? -1 : 0)));
+        else if (weaponMode == 2) {
+            projectiles.add(new TrackBullet("trackBullet", facingRight ? playerImageView.getTranslateX() + playerWidth : playerImageView.getTranslateX(), playerImageView.getTranslateY() + playerHeight / 2,
+                    new Point2D((Main.KeyCodes.getOrDefault(KeyCode.D, false) || Main.KeyCodes.getOrDefault(KeyCode.A, false)) || !Main.KeyCodes.getOrDefault(KeyCode.W, false) ? (facingRight ? 1 : -1) : 0, Main.KeyCodes.getOrDefault(KeyCode.W, false) ? -1 : 0)));
             trackgunShootCd.play();
         }
     }
@@ -225,7 +234,7 @@ public class Player {
          */
 
         for (int i = 0; i < Main.projectiles.size(); ++i) {
-            if (Main.projectiles.get(i).projectileImage.getBoundsInParent().intersects(playerImageView.getBoundsInParent()) && (Main.projectiles.get(i).type.equals("bossBullet") || Main.projectiles.get(i).type.equals("falling")))  {
+            if (Main.projectiles.get(i).projectileImage.getBoundsInParent().intersects(playerImageView.getBoundsInParent()) && (Main.projectiles.get(i).type.equals("bossBullet") || Main.projectiles.get(i).type.equals("falling"))) {
 
                 myLevel.healthes.getChildren().remove(myLevel.healthes.getChildren().size() - 1);
                 myLevel.rootPane.getChildren().remove(Main.projectiles.get(i).projectileImage);
