@@ -46,7 +46,7 @@ public class Level1Boss {
 
     public int rockHeight = 80;
     public int rockWidth = 80;
-    public int rockSpeed = 25;
+    public int rockSpeed = 22;
 
     public boolean facingRight = false;
     public boolean canShoot = true;
@@ -59,8 +59,6 @@ public class Level1Boss {
     public boolean transforming = true;
     public boolean calledT1 = false;
 
-    public Image facingLeftImage = new Image("/Level1BossFacingLeft.png");
-    public Image facingRightImage = new Image("/Level1BossFacingRight.png");
     public ImageView bossImageView;
 
     public Projectile rock;
@@ -71,7 +69,7 @@ public class Level1Boss {
 
 
     public Level1Boss() {
-        bossImageView = new ImageView(facingLeftImage);
+        bossImageView = new ImageView("level1BossDefault.png");
         bossImageView.setFitHeight(bossHeight);
         bossImageView.setFitWidth(bossWidth);
         bossImageView.setRotationAxis(new Point3D(0, 1, 0));
@@ -182,7 +180,7 @@ public class Level1Boss {
     }
 
     public void moveLeft() {
-
+        int jumpOrNot = random.nextInt(2);
         TranslateTransition tt = new TranslateTransition();
         tt.setDuration(Duration.millis(moveTime));
         tt.setNode(bossImageView);
@@ -190,6 +188,13 @@ public class Level1Boss {
         tt.setInterpolator(Interpolator.EASE_OUT);
         tt.setCycleCount(1);
         tt.play();
+        Timeline jumptime = new Timeline(new KeyFrame(Duration.millis(random.nextInt(180) + 250), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                verticalSpeed = -50;
+            }
+        }));
+        if (jumpOrNot == 1) jumptime.play();
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(moveTime), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -205,7 +210,7 @@ public class Level1Boss {
     }
 
     public void moveRight() {
-
+        int jumpOrNot = random.nextInt(2);
         TranslateTransition tt = new TranslateTransition();
         tt.setDuration(Duration.millis(moveTime));
         tt.setNode(bossImageView);
@@ -213,6 +218,13 @@ public class Level1Boss {
         tt.setInterpolator(Interpolator.EASE_OUT);
         tt.setCycleCount(1);
         tt.play();
+        Timeline jumptime = new Timeline(new KeyFrame(Duration.millis(random.nextInt(180) + 250), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                verticalSpeed = -50;
+            }
+        }));
+        if (jumpOrNot == 1) jumptime.play();
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(moveTime), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -229,6 +241,7 @@ public class Level1Boss {
 
     public void moveY() {
 
+        if (verticalSpeed < 30) verticalSpeed += 2;
         for (int i = 0; i < Math.abs(verticalSpeed); ++i) {
             for (Node standable : Main.standables) {
                 if (bossImageView.getTranslateY() + bossImageView.getFitHeight() == standable.getTranslateY() && verticalSpeed > 0) {
@@ -246,7 +259,7 @@ public class Level1Boss {
                         (Main.projectiles.get(i).type.equals("playerBullet") || Main.projectiles.get(i).type.equals("shotgunBullet") || Main.projectiles.get(i).type.equals("trackBullet"))) {
                     Main.level1.rootPane.getChildren().remove(Main.projectiles.get(i).projectileImage);
                     Main.projectiles.remove(i);
-                    hp -= 6;
+                    hp -= 600;
                 }
             }
         }

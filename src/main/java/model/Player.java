@@ -20,8 +20,6 @@ import static model.Main.standables;
 
 public class Player {
 
-    public Image facingRightImage = new Image("/cuphead.png");
-    public Image facingLeftImage = new Image("/cupheadFacingLeft.png");
     public Image player = new Image("player.png");
     public Image playermotion1 = new Image("playermotion1.png");
     public Image playermotion2 = new Image("playermotion2.png");
