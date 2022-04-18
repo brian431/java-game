@@ -296,7 +296,7 @@ public class Player {
     }
 
     public void update() {
-        detectBadThings();
+        //detectBadThings();
         movePlayer();
         if (isRunning) {
             ++frame;

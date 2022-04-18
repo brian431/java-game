@@ -30,6 +30,7 @@ public class Level1Boss {
     public int frameThrow = 0;
     public int phase0SpriteNum = 0;
     public int throwSpriteNum = 0;
+    public int readySpriteNum = 0;
 
     public int bossWidth = 400;
     public int bossHeight = 250;
@@ -41,7 +42,7 @@ public class Level1Boss {
     public int bulletHeight = 70;
     public int bulletsPerRound = 10;
     public int bulletsInterval = 600;
-    public int timeBeforeMove = 700;
+    public int timeBeforeMove = 1200;
     public int phaseCurrentTime = 0;
 
     public int rockHeight = 80;
@@ -58,6 +59,7 @@ public class Level1Boss {
     public boolean invincible = false;
     public boolean transforming = true;
     public boolean calledT1 = false;
+    public boolean readying = false;
 
     public ImageView bossImageView;
 
@@ -115,7 +117,8 @@ public class Level1Boss {
                 canShoot = false;
                 frameThrow = 0;
                 throwSpriteNum = 0;
-                playReadyToMoveAnimation();
+                readySpriteNum = 0;
+                readying = true;
             }
         });
         phaseCurrentTime += timeBeforeMove;
@@ -154,7 +157,8 @@ public class Level1Boss {
         KeyFrame readyToMoveKF = new KeyFrame(Duration.millis(phaseCurrentTime), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                playReadyToMoveAnimation();
+                readySpriteNum = 0;
+                readying = true;
             }
         });
         phaseCurrentTime += timeBeforeMove;
@@ -279,13 +283,23 @@ public class Level1Boss {
     }
 
     public void playReadyToMoveAnimation() {
-        bossImageView.setImage(new Image("rock.png"));
+        ++frame0;
+        if (frame0 == 8) {
+            ++readySpriteNum;
+            frame0 = 0;
+        }
+        //if(readySpriteNum == 4 && bossImageView.getTranslateY() == 453) bossImageView.setTranslateY(403);
+        if(readySpriteNum <= 8) {
+            String s = "level1BossReady-" + (readySpriteNum + 1) + ".png";
+            bossImageView.setImage(new Image(s));
+        }
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(timeBeforeMove), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 if (facingRight) bossImageView.setRotate(180);
                 else bossImageView.setRotate(0);
                 bossImageView.setImage(new Image("level1BossPhase0-6.png"));
+                readying = false;
             }
         }));
         tl.play();
@@ -362,7 +376,9 @@ public class Level1Boss {
             phase = 0;
             calledT1 = false;
         }
-
+        if(readying) {
+            playReadyToMoveAnimation();
+        }
         if (phase == 1 && !phaseing) {
             startPhase1Cycle();
         } else if (phase == 1 && canShoot) {
