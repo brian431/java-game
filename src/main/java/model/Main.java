@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 import scenes.Level1;
 import scenes.Level2;
 import scenes.Level3;
-import scenes.MyMenu;
+import scenes.StageSelect;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import java.util.HashMap;
 public class Main extends Application {
 
     public static Stage stage;
-    public static MyMenu menu = new MyMenu();
+    public static StageSelect menu = new StageSelect();
     public static Level1 level1;
     public static Level2 level2;
     public static Level3 level3;

@@ -9,7 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import model.Main;
 
-public class MyMenu {
+public class MainMenu {
     final int WIDTH = 1366;
     final int Height = 768;
     public Scene scene;
@@ -17,7 +17,7 @@ public class MyMenu {
     public HBox hbox;
 
 
-    public MyMenu() {
+    public MainMenu() {
         pane = new Pane();
         scene = new Scene(pane, WIDTH, Height);
         createHBox();
@@ -54,7 +54,6 @@ public class MyMenu {
 
             }
         });
-
         hbox.getChildren().add(startLevel);
     }
 }

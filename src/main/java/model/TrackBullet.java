@@ -6,7 +6,7 @@ import javafx.scene.image.ImageView;
 
 public class TrackBullet extends Projectile {
 
-    public String trackBulletImage = "bullet.png";
+    public String trackBulletImage = "trackbullet.png";
 
     TrackBullet(String type, double X, double Y, Point2D vector) {
         super(type, X, Y, vector);
