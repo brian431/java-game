@@ -105,6 +105,8 @@ public class Level1Boss {
 
         bulletsPerRound = random.nextInt(5) + 8;
         canShoot = true;
+        tempCanShoot = true;
+        throwSpriteNum = 0;
         phaseCurrentTime += bulletsPerRound * bulletsInterval;
 
         KeyFrame readyToMoveKF1 = new KeyFrame(Duration.millis(phaseCurrentTime), new EventHandler<ActionEvent>() {
@@ -194,7 +196,7 @@ public class Level1Boss {
                 verticalSpeed = -50;
             }
         }));
-        if (jumpOrNot == 1) jumptime.play();
+        if (jumpOrNot == 1 && phase == 2) jumptime.play();
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(moveTime), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -224,7 +226,7 @@ public class Level1Boss {
                 verticalSpeed = -50;
             }
         }));
-        if (jumpOrNot == 1) jumptime.play();
+        if (jumpOrNot == 1 && phase == 2) jumptime.play();
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(moveTime), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -259,7 +261,7 @@ public class Level1Boss {
                         (Main.projectiles.get(i).type.equals("playerBullet") || Main.projectiles.get(i).type.equals("shotgunBullet") || Main.projectiles.get(i).type.equals("trackBullet"))) {
                     Main.level1.rootPane.getChildren().remove(Main.projectiles.get(i).projectileImage);
                     Main.projectiles.remove(i);
-                    hp -= 600;
+                    hp -= 6;
                 }
             }
         }
