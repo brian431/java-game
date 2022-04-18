@@ -7,6 +7,7 @@ import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
+import javafx.geometry.Point3D;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -24,9 +25,13 @@ public class Level1Boss {
     public Random random = new Random(System.currentTimeMillis());
 
     public int hp = 1000;
-    public int phase = 1;
+    public int phase = -1;
+    public int frame0;
+    public int frameThrow = 0;
+    public int phase0SpriteNum = 0;
+    public int throwSpriteNum = 0;
 
-    public int bossWidth = 450;
+    public int bossWidth = 400;
     public int bossHeight = 250;
 
     public int verticalSpeed = 13;
@@ -35,8 +40,8 @@ public class Level1Boss {
     public int bulletWidth = 100;
     public int bulletHeight = 70;
     public int bulletsPerRound = 10;
-    public int bulletsInterval = 550;
-    public int timeBeforeMove = 500;
+    public int bulletsInterval = 600;
+    public int timeBeforeMove = 700;
     public int phaseCurrentTime = 0;
 
     public int rockHeight = 80;
@@ -45,9 +50,14 @@ public class Level1Boss {
 
     public boolean facingRight = false;
     public boolean canShoot = true;
+    public boolean tempCanShoot = true;
     public boolean shooting = false;
     public boolean phaseing = false;
+    public boolean phase2ing = false;
     public boolean canThrowRock = true;
+    public boolean invincible = false;
+    public boolean transforming = true;
+    public boolean calledT1 = false;
 
     public Image facingLeftImage = new Image("/Level1BossFacingLeft.png");
     public Image facingRightImage = new Image("/Level1BossFacingRight.png");
@@ -64,6 +74,7 @@ public class Level1Boss {
         bossImageView = new ImageView(facingLeftImage);
         bossImageView.setFitHeight(bossHeight);
         bossImageView.setFitWidth(bossWidth);
+        bossImageView.setRotationAxis(new Point3D(0, 1, 0));
 
         shootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval), new EventHandler<ActionEvent>() {
             @Override
@@ -87,6 +98,7 @@ public class Level1Boss {
             }
         }));
 
+
     }
 
     public void startPhase1Cycle() {
@@ -101,6 +113,8 @@ public class Level1Boss {
             @Override
             public void handle(ActionEvent actionEvent) {
                 canShoot = false;
+                frameThrow = 0;
+                throwSpriteNum = 0;
                 playReadyToMoveAnimation();
             }
         });
@@ -109,6 +123,8 @@ public class Level1Boss {
         KeyFrame moveKF = new KeyFrame(Duration.millis(phaseCurrentTime), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                frameThrow = 0;
+                throwSpriteNum = 0;
                 canShoot = false;
                 if (!facingRight) moveLeft();
                 else moveRight();
@@ -132,7 +148,7 @@ public class Level1Boss {
     public void startPhase2Cycle() {
 
         phaseCurrentTime = 0;
-        phaseing = true;
+        phase2ing = true;
         phaseCurrentTime += random.nextInt(3000);
 
         KeyFrame readyToMoveKF = new KeyFrame(Duration.millis(phaseCurrentTime), new EventHandler<ActionEvent>() {
@@ -155,7 +171,7 @@ public class Level1Boss {
         KeyFrame newKF = new KeyFrame(Duration.millis(phaseCurrentTime), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                phaseing = false;
+                phase2ing = false;
             }
         });
 
@@ -177,7 +193,8 @@ public class Level1Boss {
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(moveTime), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                bossImageView.setImage(facingRightImage);
+                bossImageView.setRotate(180);
+                bossImageView.setImage(new Image("level1BossPhase0-6.png"));
                 tt.setByX(Level1.howManyBossToShow);
                 tt.play();
                 facingRight = true;
@@ -199,7 +216,8 @@ public class Level1Boss {
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(moveTime), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                bossImageView.setImage(facingLeftImage);
+                bossImageView.setRotate(0);
+                bossImageView.setImage(new Image("level1BossPhase0-6.png"));
                 tt.setByX(-Level1.howManyBossToShow);
                 tt.play();
                 facingRight = false;
@@ -222,33 +240,27 @@ public class Level1Boss {
     }
 
     public void detectBullet() {
-        for (int i = 0; i < Main.projectiles.size(); ++i) {
-            if (Main.projectiles.get(i).projectileImage.getBoundsInParent().intersects(bossImageView.getBoundsInParent()) &&
-                    (Main.projectiles.get(i).type.equals("playerBullet") || Main.projectiles.get(i).type.equals("shotgunBullet") || Main.projectiles.get(i).type.equals("trackBullet"))) {
-                Main.level1.rootPane.getChildren().remove(Main.projectiles.get(i).projectileImage);
-                Main.projectiles.remove(i);
-                hp -= 6;
+        if (!invincible) {
+            for (int i = 0; i < Main.projectiles.size(); ++i) {
+                if (Main.projectiles.get(i).projectileImage.getBoundsInParent().intersects(bossImageView.getBoundsInParent()) &&
+                        (Main.projectiles.get(i).type.equals("playerBullet") || Main.projectiles.get(i).type.equals("shotgunBullet") || Main.projectiles.get(i).type.equals("trackBullet"))) {
+                    Main.level1.rootPane.getChildren().remove(Main.projectiles.get(i).projectileImage);
+                    Main.projectiles.remove(i);
+                    hp -= 6;
+                }
             }
         }
     }
 
-    public void bossShooting() {
-        if (canShoot)
-            shoot();
-    }
-
     public void shoot() {
-        if (!shooting) {
-            Projectile projectile = new Projectile("bossBullet", facingRight ? bossImageView.getTranslateX() + bossWidth : bossImageView.getTranslateX(), bossImageView.getTranslateY() + bossHeight / 2, new Point2D(facingRight ? 1 : -1, 0));
-            projectile.projectileImage.setImage(new Image("rock.png"));
-            projectile.projectileImage.setPreserveRatio(false);
-            projectile.projectileImage.setFitHeight(bulletHeight);
-            projectile.projectileImage.setFitWidth(bulletWidth);
+        Projectile projectile = new Projectile("bossBullet", facingRight ? bossImageView.getTranslateX() + 30 : bossImageView.getTranslateX() + 290, bossImageView.getTranslateY() + bossHeight / 2 + 20, new Point2D(facingRight ? 1 : -1, 0));
+        projectile.bulletSpeed = 15;
+        projectile.projectileImage.setImage(new Image("rock.png"));
+        projectile.projectileImage.setPreserveRatio(false);
+        projectile.projectileImage.setFitHeight(bulletHeight);
+        projectile.projectileImage.setFitWidth(bulletWidth);
 
-            projectiles.add(projectile);
-            shooting = true;
-            shootCd.play();
-        }
+        projectiles.add(projectile);
     }
 
     public void playReadyToMoveAnimation() {
@@ -256,22 +268,41 @@ public class Level1Boss {
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(timeBeforeMove), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                bossImageView.setImage(new Image(facingRight ? "Level1BossFacingRight.png" : "Level1BossFacingLeft.png"));
+                if (facingRight) bossImageView.setRotate(180);
+                else bossImageView.setRotate(0);
+                bossImageView.setImage(new Image("level1BossPhase0-6.png"));
             }
         }));
         tl.play();
     }
 
     public void playTransformAnimation() {
-        bossImageView.setImage(new Image("rock.png"));
-        Timeline tl = new Timeline(new KeyFrame(Duration.millis(2000), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                bossImageView.setImage(new Image(facingRight ? "Level1BossFacingRight.png" : "Level1BossFacingLeft.png"));
-                phase = 2;
-            }
-        }));
-        tl.play();
+        ++frame0;
+        if (frame0 == 10) {
+            ++phase0SpriteNum;
+            frame0 = 0;
+        }
+        if (phase0SpriteNum == 6) phase0SpriteNum = 0;
+        String s = "level1BossPhase0-" + (phase0SpriteNum + 1) + ".png";
+        bossImageView.setImage(new Image(s));
+        if (!calledT1) {
+            Timeline tl = new Timeline(new KeyFrame(Duration.millis(4000), new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    if (facingRight) bossImageView.setRotate(180);
+                    else bossImageView.setRotate(0);
+                    bossImageView.setImage(new Image("level1BossDefault.png"));
+                    if (phase == 0) phase = 2;
+                    else if (phase == -1) phase = 1;
+                    invincible = false;
+                    transforming = false;
+                }
+            }));
+            tl.play();
+            calledT1 = true;
+        }
+
+
     }
 
 
@@ -288,21 +319,49 @@ public class Level1Boss {
 
     }
 
+    public void shootAnimation() {
+        if (!facingRight) bossImageView.setRotate(0);
+        else bossImageView.setRotate(180);
+        ++frameThrow;
+
+        if (frameThrow == 4) {
+            ++throwSpriteNum;
+            frameThrow = 0;
+        }
+        if (throwSpriteNum == 8) {
+            throwSpriteNum = 0;
+        }
+        if (throwSpriteNum == 2 && tempCanShoot) {
+            shoot();
+            tempCanShoot = false;
+        }
+        if (throwSpriteNum == 3) tempCanShoot = true;
+        String s = "level1BossThrowing-" + (throwSpriteNum + 1) + ".png";
+        bossImageView.setImage(new Image(s));
+    }
+
     public void update() {
-        bossShooting();
         detectBullet();
         moveY();
-        if (phase == 1 && hp <= 500) phase = 0;
+        if (phase == 1 && hp <= 500) {
+            phase = 0;
+            calledT1 = false;
+        }
 
         if (phase == 1 && !phaseing) {
             startPhase1Cycle();
-        } else if (phase == 0 && !phaseing) {
+        } else if (phase == 1 && canShoot) {
+            shootAnimation();
+        } else if ((phase == 0 && canShoot) && phaseing) {
+            shootAnimation();
+        } else if ((phase == -1 || phase == 0) && !phaseing) {
+            invincible = true;
             canShoot = false;
+            transforming = true;
             playTransformAnimation();
-        } else if (phase == 2 && !phaseing) {
+        } else if (phase == 2 && !phase2ing) {
             canShoot = false;
             startPhase2Cycle();
-
         }
 
         if (phase == 2 && canThrowRock) {

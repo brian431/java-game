@@ -8,9 +8,11 @@ import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
@@ -40,6 +42,7 @@ public class Level1 extends Level {
 
     public Level1() {
 
+        healthBar = new Rectangle(160, 40, 1000, 10);
         rootPane = new Pane();
         scene = new Scene(rootPane, WIDTH, HEIGHT);
 
@@ -55,13 +58,17 @@ public class Level1 extends Level {
             }
         };
 
+        mainTimer.start();
         setPreScene();
         startReadyAnimation();
-
     }
 
     public void setPreScene() {
 
+        ImageView backgroundImage = new ImageView("level1Background.png");
+        backgroundImage.setFitWidth(WIDTH);
+        backgroundImage.setFitHeight(HEIGHT);
+        rootPane.getChildren().add(backgroundImage);
         player = new Player();
         player.myLevel = this;
 
@@ -73,9 +80,10 @@ public class Level1 extends Level {
         rootPane.getChildren().add(player.playerImageView);
         rootPane.getChildren().add(boss.bossImageView);
 
-        mainFloor = new Rectangle(0, 0, WIDTH, 168);
+        mainFloor = new Rectangle(0, 0, WIDTH, 123);
+        mainFloor.setFill(Color.TRANSPARENT);
         rootPane.getChildren().add(mainFloor);
-        mainFloor.setTranslateY(668);
+        mainFloor.setTranslateY(703);
         Main.standables.add(mainFloor);
 
         rootPane.getChildren().add(label1);
@@ -91,16 +99,18 @@ public class Level1 extends Level {
          */
 
         Label ready = new Label("READY?");
+        ready.setTextFill(Paint.valueOf("FFFFFF"));
         ready.setFont(new Font("Arial", 200));
         ready.setTranslateX(200);
         ready.setTranslateY(200);
         Label start = new Label("START");
+        start.setTextFill(Paint.valueOf("FFFFFF"));
         start.setFont(new Font("Arial", 200));
         start.setTranslateX(200);
         start.setTranslateY(200);
 
         rootPane.getChildren().add(ready);
-        Timeline tl = new Timeline(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
+        Timeline tl = new Timeline(new KeyFrame(Duration.millis(3000), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 rootPane.getChildren().remove(ready);
@@ -109,12 +119,11 @@ public class Level1 extends Level {
         }));
         tl.play();
 
-        Timeline tl2 = new Timeline(new KeyFrame(Duration.millis(2000), new EventHandler<ActionEvent>() {
+        Timeline tl2 = new Timeline(new KeyFrame(Duration.millis(4000), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 rootPane.getChildren().remove(start);
                 setScene();
-                mainTimer.start();
             }
         }));
         tl2.play();
@@ -123,16 +132,16 @@ public class Level1 extends Level {
 
     void setScene() {
 
-        healthBar = new Rectangle(160, 40, 1000, 10);
+
         healthBar.setFill(Color.RED);
         rootPane.getChildren().add(healthBar);
 
-        health1.setFitHeight(30);
-        health1.setFitWidth(30);
-        health2.setFitHeight(30);
-        health2.setFitWidth(30);
-        health3.setFitHeight(30);
-        health3.setFitWidth(30);
+        health1.setFitHeight(60);
+        health1.setFitWidth(60);
+        health2.setFitHeight(60);
+        health2.setFitWidth(60);
+        health3.setFitHeight(60);
+        health3.setFitWidth(60);
         healthes.getChildren().addAll(health1, health2, health3);
         rootPane.getChildren().add(healthes);
 
@@ -144,7 +153,8 @@ public class Level1 extends Level {
         player.update();
         boss.update();
         label1.setFont(new Font("Times New Roman", 200));
-        label1.setText("" + player.playerImageView.getFitWidth());
+        label1.setTextFill(Paint.valueOf("FFFFFF"));
+        label1.setText("");
 
         /** add and remove projectiles*/
         for (int i = 0; i < projectiles.size(); ++i) {
@@ -165,7 +175,7 @@ public class Level1 extends Level {
 
 
         /** player dead */
-        if (healthes.getChildren().size() == 0 && !playingLose) {
+        if ((boss.phase != -1 && healthes.getChildren().size() == 0) && !playingLose) {
             startLoseAnimation();
             playingLose = true;
             mainTimer.stop();
@@ -175,6 +185,7 @@ public class Level1 extends Level {
     public void startLoseAnimation() {
         Label lose = new Label("YOU LOSE");
         lose.setFont(new Font("Arial", 200));
+        lose.setTextFill(Paint.valueOf("FFFFFF"));
         lose.setTranslateX(200);
         lose.setTranslateY(200);
         rootPane.getChildren().add(lose);

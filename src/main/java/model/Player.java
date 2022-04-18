@@ -26,7 +26,6 @@ public class Player {
     public Image playermotion1 = new Image("playermotion1.png");
     public Image playermotion2 = new Image("playermotion2.png");
     public Image playermotion3 = new Image("playermotion3.png");
-    public int hp = 3;
 
     public int weaponMode = 0;
     public int frame = 0;
@@ -67,7 +66,7 @@ public class Player {
         playerImageView = new ImageView(player);
         playerImageView.setFitHeight(150);
         playerImageView.setFitWidth(95);
-        //dplayerImageView.setPreserveRatio(true);
+        //playerImageView.setPreserveRatio(true);
 
         dashCd = new Timeline(new KeyFrame(Duration.millis(600), new EventHandler<ActionEvent>() {
             @Override
@@ -85,14 +84,14 @@ public class Player {
         }));
 
 
-        trackgunShootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval + 200), new EventHandler<ActionEvent>() {
+        trackgunShootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval + 100), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 canShoot = true;
             }
         }));
 
-        shotgunShootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval + 400), new EventHandler<ActionEvent>() {
+        shotgunShootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval + 200), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 canShoot = true;
@@ -299,7 +298,7 @@ public class Player {
     }
 
     public void update() {
-        //detectBadThings();
+        detectBadThings();
         movePlayer();
         if (isRunning) {
             ++frame;
