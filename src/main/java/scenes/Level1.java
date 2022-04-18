@@ -144,7 +144,7 @@ public class Level1 extends Level {
         player.update();
         boss.update();
         label1.setFont(new Font("Times New Roman", 200));
-        label1.setText("" + player.weaponMode);
+        label1.setText("" + player.playerImageView.getFitWidth());
 
         /** add and remove projectiles*/
         for (int i = 0; i < projectiles.size(); ++i) {

@@ -7,6 +7,7 @@ import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
+import javafx.geometry.Point3D;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -21,11 +22,17 @@ public class Player {
 
     public Image facingRightImage = new Image("/cuphead.png");
     public Image facingLeftImage = new Image("/cupheadFacingLeft.png");
+    public Image player = new Image("player.png");
+    public Image playermotion1 = new Image("playermotion1.png");
+    public Image playermotion2 = new Image("playermotion2.png");
+    public Image playermotion3 = new Image("playermotion3.png");
     public int hp = 3;
 
     public int weaponMode = 0;
+    public int frame = 0;
+    public int spriteNum = 0;
 
-    public double playerWidth = 95.45;
+    public double playerWidth = 95;
     public double playerHeight = 150;
     public int horizontalSpeed = 13;
 
@@ -43,6 +50,7 @@ public class Player {
     public boolean canDash = true;
     public boolean canSwitchWeapon = true;
     public boolean invincible = false;
+    public boolean isRunning = false;
 
     public Timeline dashCd;
     public Timeline shootCd;
@@ -56,10 +64,10 @@ public class Player {
 
     public Player() {
 
-        playerImageView = new ImageView(facingRightImage);
-        playerImageView.setFitHeight(playerHeight);
-        playerImageView.setFitWidth(playerWidth);
-        playerImageView.setPreserveRatio(true);
+        playerImageView = new ImageView(player);
+        playerImageView.setFitHeight(150);
+        playerImageView.setFitWidth(95);
+        //dplayerImageView.setPreserveRatio(true);
 
         dashCd = new Timeline(new KeyFrame(Duration.millis(600), new EventHandler<ActionEvent>() {
             @Override
@@ -97,6 +105,8 @@ public class Player {
                 invincible = false;
             }
         }));
+
+        playerImageView.setRotationAxis(new Point3D(0, 1, 0));
     }
 
     public void movePlayer() {
@@ -104,10 +114,19 @@ public class Player {
         if (verticalSpeed < 30) verticalSpeed += 2;
         moveY();
 
+        if ((!Main.KeyCodes.getOrDefault(KeyCode.A, false) && !Main.KeyCodes.getOrDefault(KeyCode.D, false)) || Main.KeyCodes.getOrDefault(KeyCode.W, false)) {
+            playerImageView.setImage(player);
+        }
+
         /** Key A */
         if (Main.KeyCodes.getOrDefault(KeyCode.A, false)) {
-            facingRight = false;
-            playerImageView.setImage(facingLeftImage);
+            if (facingRight) {
+                facingRight = false;
+                playerImageView.setRotate(180);
+            }
+            isRunning = true;
+
+
             if (!Main.KeyCodes.getOrDefault(KeyCode.W, false)) {
                 if (playerImageView.getTranslateX() > horizontalSpeed) {
                     playerImageView.setTranslateX(playerImageView.getTranslateX() - horizontalSpeed);
@@ -115,13 +134,28 @@ public class Player {
                 if (!canJump && playerImageView.getTranslateX() > 3) {
                     //playerImageView.setTranslateX(playerImageView.getTranslateX() - 3);
                 }
+                if (spriteNum == 0) {
+                    playerImageView.setImage(playermotion1);
+                } else if (spriteNum == 1) {
+                    playerImageView.setImage(playermotion2);
+                } else if (spriteNum == 2) {
+                    playerImageView.setImage(playermotion3);
+                }
             }
+
+
         }
 
         /** Key D */
         if (Main.KeyCodes.getOrDefault(KeyCode.D, false)) {
-            facingRight = true;
-            playerImageView.setImage(facingRightImage);
+            if (!facingRight) {
+                facingRight = true;
+                playerImageView.setRotate(0);
+            }
+
+            isRunning = true;
+
+
             if (!Main.KeyCodes.getOrDefault(KeyCode.W, false)) {
                 if (playerImageView.getTranslateX() + playerImageView.getFitWidth() < Level.WIDTH - horizontalSpeed) {
                     playerImageView.setTranslateX(playerImageView.getTranslateX() + horizontalSpeed);
@@ -129,7 +163,16 @@ public class Player {
                 if (!canJump && playerImageView.getTranslateX() + playerImageView.getFitWidth() < Level.WIDTH - 3) {
                     //playerImageView.setTranslateX(playerImageView.getTranslateX() + 3);
                 }
+                if (spriteNum == 0) {
+                    playerImageView.setImage(playermotion1);
+                } else if (spriteNum == 1) {
+                    playerImageView.setImage(playermotion2);
+                } else if (spriteNum == 2) {
+                    playerImageView.setImage(playermotion3);
+                }
             }
+
+
         }
 
         /** Key Space */
@@ -258,5 +301,17 @@ public class Player {
     public void update() {
         //detectBadThings();
         movePlayer();
+        if (isRunning) {
+            ++frame;
+            if (frame == 8) {
+                ++spriteNum;
+                frame = 0;
+            }
+            if (spriteNum == 3) {
+                spriteNum = 0;
+            }
+        }
+
+
     }
 }
