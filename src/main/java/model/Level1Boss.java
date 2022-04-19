@@ -36,6 +36,7 @@ public class Level1Boss {
     public int bossHeight = 250;
 
     public int verticalSpeed = 13;
+    public int jumpSpeed = 45;
     public int moveTime = 2000;
 
     public int bulletWidth = 100;
@@ -197,7 +198,7 @@ public class Level1Boss {
         Timeline jumptime = new Timeline(new KeyFrame(Duration.millis(random.nextInt(180) + 250), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                verticalSpeed = -50;
+                verticalSpeed = -jumpSpeed;
             }
         }));
         if (!(jumpOrNot == 1) && phase == 2) jumptime.play();
@@ -227,7 +228,7 @@ public class Level1Boss {
         Timeline jumptime = new Timeline(new KeyFrame(Duration.millis(random.nextInt(180) + 250), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                verticalSpeed = -50;
+                verticalSpeed = -jumpSpeed;
             }
         }));
         if (!(jumpOrNot == 1) && phase == 2) jumptime.play();

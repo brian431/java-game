@@ -82,7 +82,7 @@ public class Player {
         }));
 
 
-        trackgunShootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval + 100), new EventHandler<ActionEvent>() {
+        trackgunShootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval + 150), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 canShoot = true;

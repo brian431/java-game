@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
@@ -98,23 +99,21 @@ public class Level1 extends Level {
          *  play start animation and set the timer
          */
 
-        Label ready = new Label("READY?");
-        ready.setTextFill(Paint.valueOf("FFFFFF"));
-        ready.setFont(new Font("Arial", 200));
-        ready.setTranslateX(200);
-        ready.setTranslateY(200);
-        Label start = new Label("START");
-        start.setTextFill(Paint.valueOf("FFFFFF"));
-        start.setFont(new Font("Arial", 200));
-        start.setTranslateX(200);
-        start.setTranslateY(200);
+        ImageView goImage = new ImageView(new Image("goImage.png"));
+        ImageView readyImage = new ImageView(new Image("readyImage.png"));
+        readyImage.setTranslateX(300);
+        readyImage.setTranslateY(280);
+        goImage.setTranslateX(380);
+        goImage.setTranslateY(250);
+        goImage.setFitHeight(200);
+        goImage.setPreserveRatio(true);
 
-        rootPane.getChildren().add(ready);
+        rootPane.getChildren().add(readyImage);
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(3000), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                rootPane.getChildren().remove(ready);
-                rootPane.getChildren().add(start);
+                rootPane.getChildren().remove(readyImage);
+                rootPane.getChildren().add(goImage);
             }
         }));
         tl.play();
@@ -122,7 +121,7 @@ public class Level1 extends Level {
         Timeline tl2 = new Timeline(new KeyFrame(Duration.millis(4000), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                rootPane.getChildren().remove(start);
+                rootPane.getChildren().remove(goImage);
                 setScene();
             }
         }));
@@ -187,7 +186,7 @@ public class Level1 extends Level {
         lose.setFont(new Font("Arial", 200));
         lose.setTextFill(Paint.valueOf("FFFFFF"));
         lose.setTranslateX(200);
-        lose.setTranslateY(200);
+        lose.setTranslateY(300);
         rootPane.getChildren().add(lose);
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(2000), new EventHandler<ActionEvent>() {
             @Override
