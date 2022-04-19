@@ -45,7 +45,7 @@ public class Level1Boss {
     public int timeBeforeMove = 1200;
     public int phaseCurrentTime = 0;
 
-    public int rockHeight = 80;
+    public int rockHeight = 120;
     public int rockWidth = 80;
     public int rockSpeed = 22;
 
@@ -186,7 +186,7 @@ public class Level1Boss {
     }
 
     public void moveLeft() {
-        int jumpOrNot = random.nextInt(2);
+        int jumpOrNot = random.nextInt(3);
         TranslateTransition tt = new TranslateTransition();
         tt.setDuration(Duration.millis(moveTime));
         tt.setNode(bossImageView);
@@ -200,7 +200,7 @@ public class Level1Boss {
                 verticalSpeed = -50;
             }
         }));
-        if (jumpOrNot == 1 && phase == 2) jumptime.play();
+        if (!(jumpOrNot == 1) && phase == 2) jumptime.play();
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(moveTime), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -216,7 +216,7 @@ public class Level1Boss {
     }
 
     public void moveRight() {
-        int jumpOrNot = random.nextInt(2);
+        int jumpOrNot = random.nextInt(3);
         TranslateTransition tt = new TranslateTransition();
         tt.setDuration(Duration.millis(moveTime));
         tt.setNode(bossImageView);
@@ -230,7 +230,7 @@ public class Level1Boss {
                 verticalSpeed = -50;
             }
         }));
-        if (jumpOrNot == 1 && phase == 2) jumptime.play();
+        if (!(jumpOrNot == 1) && phase == 2) jumptime.play();
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(moveTime), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -265,7 +265,7 @@ public class Level1Boss {
                         (Main.projectiles.get(i).type.equals("playerBullet") || Main.projectiles.get(i).type.equals("shotgunBullet") || Main.projectiles.get(i).type.equals("trackBullet"))) {
                     Main.level1.rootPane.getChildren().remove(Main.projectiles.get(i).projectileImage);
                     Main.projectiles.remove(i);
-                    hp -= 6;
+                    hp -= 5;
                 }
             }
         }
@@ -339,6 +339,8 @@ public class Level1Boss {
 
         rockCd.play();
         rock = new Projectile("falling", level1.player.playerImageView.getTranslateX(), -30, new Point2D(0, 1));
+        rock.projectileImage.setImage(new Image("fireball.png"));
+        rock.projectileImage.setRotate(0);
         rock.projectileImage.setFitHeight(rockHeight);
         rock.projectileImage.setFitWidth(rockWidth);
         rock.bulletSpeed = rockSpeed;
@@ -372,7 +374,7 @@ public class Level1Boss {
     public void update() {
         detectBullet();
         moveY();
-        if (phase == 1 && hp <= 500) {
+        if (phase == 1 && hp <= 600) {
             phase = 0;
             calledT1 = false;
         }

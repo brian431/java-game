@@ -39,7 +39,7 @@ public class Player {
     public int dashLength = 330;
     public int dashDuration = 120;
 
-    public int bulletsInterval = 200;
+    public int bulletsInterval = 220;
 
     public boolean canJump = false;
     public boolean canShoot = true;
@@ -89,7 +89,7 @@ public class Player {
             }
         }));
 
-        shotgunShootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval + 200), new EventHandler<ActionEvent>() {
+        shotgunShootCd = new Timeline(new KeyFrame(Duration.millis(bulletsInterval + 270), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 canShoot = true;
@@ -296,7 +296,7 @@ public class Player {
     }
 
     public void update() {
-        //detectBadThings();
+        detectBadThings();
         movePlayer();
         if (isRunning) {
             ++frame;
