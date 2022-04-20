@@ -38,6 +38,7 @@ public class Level1Boss {
     public int verticalSpeed = 13;
     public int jumpSpeed = 45;
     public int moveTime = 2000;
+    public int moveTime2 = 1500;
 
     public int bulletWidth = 100;
     public int bulletHeight = 70;
@@ -187,6 +188,7 @@ public class Level1Boss {
     }
 
     public void moveLeft() {
+        if(phase == 2) moveTime = moveTime2;
         int jumpOrNot = random.nextInt(3);
         TranslateTransition tt = new TranslateTransition();
         tt.setDuration(Duration.millis(moveTime));
@@ -195,7 +197,7 @@ public class Level1Boss {
         tt.setInterpolator(Interpolator.EASE_OUT);
         tt.setCycleCount(1);
         tt.play();
-        Timeline jumptime = new Timeline(new KeyFrame(Duration.millis(random.nextInt(180) + 250), new EventHandler<ActionEvent>() {
+        Timeline jumptime = new Timeline(new KeyFrame(Duration.millis(random.nextInt(150) + 240), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 verticalSpeed = -jumpSpeed;
@@ -217,6 +219,7 @@ public class Level1Boss {
     }
 
     public void moveRight() {
+        if(phase == 2) moveTime = moveTime2;
         int jumpOrNot = random.nextInt(3);
         TranslateTransition tt = new TranslateTransition();
         tt.setDuration(Duration.millis(moveTime));
@@ -225,7 +228,7 @@ public class Level1Boss {
         tt.setInterpolator(Interpolator.EASE_OUT);
         tt.setCycleCount(1);
         tt.play();
-        Timeline jumptime = new Timeline(new KeyFrame(Duration.millis(random.nextInt(180) + 250), new EventHandler<ActionEvent>() {
+        Timeline jumptime = new Timeline(new KeyFrame(Duration.millis(random.nextInt(150) + 240), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 verticalSpeed = -jumpSpeed;

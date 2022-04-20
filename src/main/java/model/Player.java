@@ -274,7 +274,7 @@ public class Player {
          */
 
         for (int i = 0; i < Main.projectiles.size(); ++i) {
-            if (Main.projectiles.get(i).projectileImage.getBoundsInParent().intersects(playerImageView.getBoundsInParent()) && (Main.projectiles.get(i).type.equals("bossBullet") || Main.projectiles.get(i).type.equals("falling"))) {
+            if ((!invincible && Main.projectiles.get(i).projectileImage.getBoundsInParent().intersects(playerImageView.getBoundsInParent())) && (Main.projectiles.get(i).type.equals("bossBullet") || Main.projectiles.get(i).type.equals("falling"))) {
 
                 myLevel.healthes.getChildren().remove(myLevel.healthes.getChildren().size() - 1);
                 myLevel.rootPane.getChildren().remove(Main.projectiles.get(i).projectileImage);
