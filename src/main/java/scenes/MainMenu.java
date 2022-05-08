@@ -52,7 +52,13 @@ public class MainMenu {
     Button createLevelButton(String name , int width , int height) {
         Button startLevel = new Button(name);
         startLevel.setPrefSize(width, height);
+        if(name.equals("Start")) {
 
+        }else if(name.equals("Tutorial")) {
+
+        }else if(name.equals("Leave")) {
+
+        }
         startLevel.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -65,6 +71,12 @@ public class MainMenu {
                 } else if (name.equals("Level3")) {
                     Main.level3 = new Level3();
                     Main.stage.setScene(Main.level3.scene);
+                } else if (name.equals("Start")) {
+
+                } else if (name.equals("Tutorial")) {
+
+                } else if (name.equals("Leave")) {
+
                 }
 
             }

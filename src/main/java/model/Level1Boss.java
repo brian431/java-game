@@ -35,10 +35,10 @@ public class Level1Boss {
     public int bossWidth = 400;
     public int bossHeight = 250;
 
-    public int verticalSpeed = 13;
+    public int verticalSpeed = 15;
     public int jumpSpeed = 45;
     public int moveTime = 2000;
-    public int moveTime2 = 1500;
+    public int moveTime2 = 1750;
 
     public int bulletWidth = 100;
     public int bulletHeight = 70;
