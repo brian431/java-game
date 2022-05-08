@@ -72,7 +72,8 @@ public class MainMenu {
                     Main.level3 = new Level3();
                     Main.stage.setScene(Main.level3.scene);
                 } else if (name.equals("Start")) {
-
+                    Main.level1 = new Level1();
+                    Main.stage.setScene(Main.level1.scene);
                 } else if (name.equals("Tutorial")) {
 
                 } else if (name.equals("Leave")) {
