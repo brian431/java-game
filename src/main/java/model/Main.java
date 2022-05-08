@@ -18,6 +18,7 @@ public class Main extends Application {
     public static Level2 level2;
     public static Level3 level3;
     public static MainMenu Mainmenu;
+    public static Tutorial tutorial;
 
     static {
         try {
