@@ -47,7 +47,7 @@ public class MainMenu {
         Vbox.getChildren().add(createLevelButton("Start",317,100));
         Hbox.getChildren().addAll(createLevelButton("Tutorial",170 ,100),createLevelButton("Leave",120,100));
         Vbox.getChildren().add(Hbox);
-        Vbox.relocate(524,333);
+        Vbox.relocate(490,333);
 
     }
 
@@ -91,6 +91,8 @@ public class MainMenu {
                 } else if (name.equals("Start")) {
                     Main.level1 = new Level1();
                     Main.stage.setScene(Main.level1.scene);
+
+
                 } else if (name.equals("Tutorial")) {
                     Main.tutorial = new Tutorial();
                     Main.stage.setScene(Main.tutorial.scene);

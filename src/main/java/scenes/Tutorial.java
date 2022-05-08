@@ -47,7 +47,7 @@ public class Tutorial {
 
     }
     public void init(){
-        pane.setBackground(new Background(new BackgroundImage(new Image("TutorialBackGround.png"), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT)));
+        pane.setBackground(new Background(new BackgroundImage(new Image("room.png"), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT)));
         player = new Player();
         player.onTutorial = true;
 
