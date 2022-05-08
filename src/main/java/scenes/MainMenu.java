@@ -55,6 +55,8 @@ public class MainMenu {
         Button startLevel = new Button("");
         startLevel.setPrefSize(width, height);
         startLevel.setContentDisplay(GRAPHIC_ONLY);
+        startLevel.setStyle("-fx-background-color: transparent");
+
         if(name.equals("Start")) {
             ImageView view = new ImageView(new Image("Start.png"));
             view.setFitWidth(width);
