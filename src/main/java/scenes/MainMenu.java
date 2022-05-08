@@ -1,42 +1,57 @@
 package scenes;
 
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import model.Main;
+
+import java.io.IOException;
 
 public class MainMenu {
     final int WIDTH = 1366;
     final int Height = 768;
     public Scene scene;
     public Pane pane;
-    public HBox hbox;
+    public VBox Vbox;
+    //private Label Title = new Label("奇怪的動作遊戲");
+    Image TitleImage = new Image("Title.png");
+    ImageView Title = new ImageView(TitleImage);
 
+    public MainMenu() throws IOException {
 
-    public MainMenu() {
         pane = new Pane();
+        Title.relocate(250,75);
+        pane.getChildren().add(Title);
+
+        pane.setBackground(new Background(new BackgroundImage(new Image("MainMenu.png"), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT)));
         scene = new Scene(pane, WIDTH, Height);
-        createHBox();
+        createVBox();
+        pane.getChildren().add(Vbox);
     }
 
-    void createHBox() {
-        hbox = new HBox(20);
-        hbox.setPrefSize(1000, 500);
-        createLevelButton("Level1");
-        createLevelButton("Level2");
-        createLevelButton("Level3");
-        hbox.setAlignment(Pos.CENTER);
-        pane.getChildren().add(hbox);
-        hbox.setLayoutX(200);
+
+    void createVBox() {
+        Vbox = new VBox(30);
+        Vbox.setPrefSize(1000,500);
+        //hbox.setPrefSize(1000, 500);
+        HBox Hbox = new HBox(10);
+        //hbox.setAlignment(Pos.CENTER);
+        //pane.getChildren().add(hbox);
+        //hbox.setLayoutX(200);
+        Vbox.getChildren().add(createLevelButton("Start",300,100));
+        Hbox.getChildren().addAll(createLevelButton("Tutorial",145 ,100),createLevelButton("Leave",145,100));
+        Vbox.getChildren().add(Hbox);
+        Vbox.relocate(533,333);
+
     }
 
-    void createLevelButton(String name) {
+    Button createLevelButton(String name , int width , int height) {
         Button startLevel = new Button(name);
-        startLevel.setPrefSize(200, 200);
+        startLevel.setPrefSize(width, height);
 
         startLevel.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -54,6 +69,6 @@ public class MainMenu {
 
             }
         });
-        hbox.getChildren().add(startLevel);
+        return startLevel;
     }
 }
