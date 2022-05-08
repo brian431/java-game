@@ -48,6 +48,7 @@ public class Player {
     public boolean canSwitchWeapon = true;
     public boolean invincible = false;
     public boolean isRunning = false;
+    public boolean onTutorial = false;
 
     public Timeline dashCd;
     public Timeline shootCd;
@@ -296,6 +297,7 @@ public class Player {
     }
 
     public void update() {
+        if(!onTutorial)
         detectBadThings();
         movePlayer();
         if (isRunning) {
