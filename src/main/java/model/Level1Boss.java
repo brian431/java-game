@@ -277,11 +277,10 @@ public class Level1Boss {
                     Main.level1.rootPane.getChildren().remove(Main.projectiles.get(i).projectileImage);
                     Main.projectiles.remove(i);
                     hp -= 5;
-                    System.out.println("2");
-                    file = new File("src\\main\\resources\\bullet2.mp3");
+                    file = new File("src\\main\\resources\\bullet2.wav");
                     media = new Media(file.toURI().toString());
                     Player = new MediaPlayer(media);
-                    Player.setVolume(0.99);
+                    Player.setVolume(0.25);
                     Player.play();
                 }
             }

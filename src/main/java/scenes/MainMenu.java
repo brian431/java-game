@@ -99,9 +99,9 @@ public class MainMenu {
 
                 mediaPlayer.stop();
 //                file = new File("src\\main\\resources\\pushbuttom.wav");
-                media = new Media(file.toURI().toString());
-                mediaPlayer = new MediaPlayer(media);
-                mediaPlayer.play();
+//                media = new Media(file.toURI().toString());
+//                mediaPlayer = new MediaPlayer(media);
+//                mediaPlayer.play();
 
                 Timeline tl = new Timeline(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
                     @Override
