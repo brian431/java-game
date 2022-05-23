@@ -16,10 +16,8 @@ import java.io.File;
 
 import static model.Main.projectiles;
 
-public class Tutorial {
+public class Tutorial extends Level{
 
-    final int WIDTH = 1366;
-    final int Height = 768;
     public Scene scene;
     public Pane pane;
 
@@ -34,7 +32,7 @@ public class Tutorial {
     public Tutorial(){
 
         pane = new Pane();
-        scene = new Scene(pane,WIDTH,Height);
+        scene = new Scene(pane,WIDTH,HEIGHT);
 
         scene.setOnKeyPressed(keyEvent -> Main.KeyCodes.put(keyEvent.getCode(), true));
         scene.setOnKeyReleased(keyEvent -> Main.KeyCodes.put(keyEvent.getCode(), false));
@@ -56,6 +54,7 @@ public class Tutorial {
 
         mainTimer.start();
         init();
+
 
     }
     public void init(){
@@ -87,5 +86,13 @@ public class Tutorial {
                 projectiles.remove(i);
             }
         }
+    }
+    public void start(){
+        //
+
+    }
+    public void end(){
+
+        //
     }
 }

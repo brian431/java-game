@@ -300,6 +300,11 @@ public class Player {
                 myLevel.rootPane.getChildren().remove(Main.projectiles.get(i).projectileImage);
                 Main.projectiles.remove(i);
 
+                File file = new File("src\\main\\resources\\getdamage.wav");
+                Media media = new Media(file.toURI().toString());
+                MediaPlayer Player = new MediaPlayer(media);
+                Player.play();
+
                 invincible = true;
                 invincibleCd.play();
             }
@@ -315,7 +320,6 @@ public class Player {
             Player.play();
 
             invincible = true;
-
             invincibleCd.play();
         }
     }
