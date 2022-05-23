@@ -1,5 +1,8 @@
 package scenes;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -7,9 +10,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 import model.Main;
-
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import javafx.scene.media.Media;
 
 import static javafx.scene.control.ContentDisplay.GRAPHIC_ONLY;
 
@@ -19,6 +27,9 @@ public class MainMenu {
     public Scene scene;
     public Pane pane;
     public VBox Vbox;
+    public File file;
+    public Media media;
+    public MediaPlayer mediaPlayer;
     //private Label Title = new Label("奇怪的動作遊戲");
     Image TitleImage = new Image("Title.png");
     ImageView Title = new ImageView(TitleImage);
@@ -32,6 +43,13 @@ public class MainMenu {
         scene = new Scene(pane, WIDTH, Height);
         createVBox();
         pane.getChildren().add(Vbox);
+
+        //media
+        file = new File("src\\main\\resources\\bgmmenu.mp3");
+        media = new Media(file.toURI().toString());
+        mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayer.play();
     }
 
 
@@ -78,26 +96,39 @@ public class MainMenu {
         startLevel.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                if (name.equals("Level1")) {
-                    Main.level1 = new Level1();
-                    Main.stage.setScene(Main.level1.scene);
-                } else if (name.equals("Level2")) {
-                    Main.level2 = new Level2();
-                    Main.stage.setScene(Main.level2.scene);
-                } else if (name.equals("Level3")) {
-                    Main.level3 = new Level3();
-                    Main.stage.setScene(Main.level3.scene);
-                } else if (name.equals("Start")) {
-                    Main.level1 = new Level1();
-                    Main.stage.setScene(Main.level1.scene);
 
+                mediaPlayer.stop();
+                file = new File("src\\main\\resources\\pushbuttom.wav");
+                media = new Media(file.toURI().toString());
+                mediaPlayer = new MediaPlayer(media);
+                mediaPlayer.play();
 
-                } else if (name.equals("Tutorial")) {
-                    Main.tutorial = new Tutorial();
-                    Main.stage.setScene(Main.tutorial.scene);
-                } else if (name.equals("Leave")) {
-                    Main.stage.close();
-                }
+                Timeline tl = new Timeline(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        if (name.equals("Level1")) {
+                            Main.level1 = new Level1();
+                            Main.stage.setScene(Main.level1.scene);
+                        } else if (name.equals("Level2")) {
+                            Main.level2 = new Level2();
+                            Main.stage.setScene(Main.level2.scene);
+                        } else if (name.equals("Level3")) {
+                            Main.level3 = new Level3();
+                            Main.stage.setScene(Main.level3.scene);
+                        } else if (name.equals("Start")) {
+                            Main.level1 = new Level1();
+                            Main.stage.setScene(Main.level1.scene);
+                        } else if (name.equals("Tutorial")) {
+                            Main.tutorial = new Tutorial();
+                            Main.stage.setScene(Main.tutorial.scene);
+                        } else if (name.equals("Leave")) {
+                            Main.stage.close();
+                        }
+
+                    }
+                }));
+
+                tl.play();
 
             }
         });

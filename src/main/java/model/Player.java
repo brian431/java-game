@@ -12,8 +12,12 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import scenes.Level;
+
+import java.io.File;
 
 import static model.Main.projectiles;
 import static model.Main.standables;
@@ -55,6 +59,8 @@ public class Player {
     public Timeline shotgunShootCd;
     public Timeline trackgunShootCd;
     public Timeline invincibleCd;
+
+
 
     public ImageView playerImageView;
 
@@ -177,11 +183,24 @@ public class Player {
         if (Main.KeyCodes.getOrDefault(KeyCode.SPACE, false) && canJump) {
             verticalSpeed = -jumpHeight;
             canJump = false;
+            File file = new File("src\\main\\resources\\jump2.flac");
+            Media media = new Media(file.toURI().toString());
+            MediaPlayer Player = new MediaPlayer(media);
+            Player.play();
+
         }
 
         /** Key Shift */
         if (Main.KeyCodes.getOrDefault(KeyCode.SHIFT, false)) {
-            if (canDash) dash();
+            if (canDash) {
+                File file = new File("src\\main\\resources\\dash.wav");
+                Media media = new Media(file.toURI().toString());
+                MediaPlayer Player = new MediaPlayer(media);
+                Player.play();
+
+                dash();
+            }
+
         }
 
         /** Key J */
@@ -289,6 +308,11 @@ public class Player {
         if (playerImageView.getBoundsInParent().intersects(myLevel.bossHitbox.getBoundsInParent()) && !invincible) {
 
             myLevel.healthes.getChildren().remove(myLevel.healthes.getChildren().size() - 1);
+
+            File file = new File("src\\main\\resources\\getdamage.wav");
+            Media media = new Media(file.toURI().toString());
+            MediaPlayer Player = new MediaPlayer(media);
+            Player.play();
 
             invincible = true;
 

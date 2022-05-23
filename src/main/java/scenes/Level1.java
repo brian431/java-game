@@ -12,6 +12,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
@@ -21,6 +23,7 @@ import model.Level1Boss;
 import model.Main;
 import model.Player;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -36,6 +39,9 @@ public class Level1 extends Level {
     public Player player;
     public Level1Boss boss;
     public boolean playingLose = false;
+    public File file;
+    public Media media;
+    public MediaPlayer level1BgmPlayer;
 
     AnimationTimer mainTimer;
     Timeline phase1Cycle;
@@ -52,6 +58,12 @@ public class Level1 extends Level {
         scene.setOnMousePressed(e -> Main.KeyCodes.put(KeyCode.J, true));
         scene.setOnMouseReleased(e -> Main.KeyCodes.put(KeyCode.J, false));
 
+        file = new File("src\\main\\resources\\bgmlevel1.wav");
+        media = new Media(file.toURI().toString());
+        level1BgmPlayer = new MediaPlayer(media);
+        level1BgmPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        level1BgmPlayer.play();
+
         mainTimer = new AnimationTimer() {
             @Override
             public void handle(long l) {
@@ -62,6 +74,7 @@ public class Level1 extends Level {
         mainTimer.start();
         setPreScene();
         startReadyAnimation();
+
     }
 
     public void setPreScene() {
@@ -196,7 +209,8 @@ public class Level1 extends Level {
                 Main.KeyCodes = new HashMap<>();
                 Main.projectiles = new ArrayList<>();
                 Main.level1 = null;
-                Main.stage.setScene(Main.menu.scene);
+                Main.stage.setScene(Main.Mainmenu.scene);
+                level1BgmPlayer.stop();
             }
         }));
         tl.play();

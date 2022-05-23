@@ -11,10 +11,13 @@ import javafx.geometry.Point3D;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import scenes.Level;
 import scenes.Level1;
 
+import java.io.File;
 import java.util.Random;
 
 import static model.Main.level1;
@@ -62,6 +65,10 @@ public class Level1Boss {
     public boolean transforming = true;
     public boolean calledT1 = false;
     public boolean readying = false;
+
+    public File file;
+    public Media media;
+    public MediaPlayer Player;
 
     public ImageView bossImageView;
 
@@ -270,6 +277,12 @@ public class Level1Boss {
                     Main.level1.rootPane.getChildren().remove(Main.projectiles.get(i).projectileImage);
                     Main.projectiles.remove(i);
                     hp -= 5;
+                    System.out.println("2");
+                    file = new File("src\\main\\resources\\bullet2.mp3");
+                    media = new Media(file.toURI().toString());
+                    Player = new MediaPlayer(media);
+                    Player.setVolume(0.99);
+                    Player.play();
                 }
             }
         }

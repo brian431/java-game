@@ -5,7 +5,6 @@ import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import scenes.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
