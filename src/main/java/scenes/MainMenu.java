@@ -38,8 +38,8 @@ public class MainMenu {
         pane = new Pane();
         Title.relocate(250,75);
         pane.getChildren().add(Title);
-
         pane.setBackground(new Background(new BackgroundImage(new Image("MainMenu.png"), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT)));
+
         scene = new Scene(pane, WIDTH, Height);
         createVBox();
         pane.getChildren().add(Vbox);
@@ -98,12 +98,12 @@ public class MainMenu {
             public void handle(MouseEvent mouseEvent) {
 
                 mediaPlayer.stop();
-//                file = new File("src\\main\\resources\\pushbuttom.wav");
-//                media = new Media(file.toURI().toString());
-//                mediaPlayer = new MediaPlayer(media);
-//                mediaPlayer.play();
+                file = new File("src\\main\\resources\\pushbuttom.wav");
+                media = new Media(file.toURI().toString());
+                mediaPlayer = new MediaPlayer(media);
+                mediaPlayer.play();
 
-                Timeline tl = new Timeline(new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
+                Timeline tl = new Timeline(new KeyFrame(Duration.millis(500), new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent actionEvent) {
                         if (name.equals("Level1")) {

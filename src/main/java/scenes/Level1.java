@@ -195,6 +195,7 @@ public class Level1 extends Level {
     }
 
     public void startLoseAnimation() {
+        level1BgmPlayer.stop();
         Label lose = new Label("YOU LOSE");
         lose.setFont(new Font("Arial", 200));
         lose.setTextFill(Paint.valueOf("FFFFFF"));
@@ -210,7 +211,6 @@ public class Level1 extends Level {
                 Main.projectiles = new ArrayList<>();
                 Main.level1 = null;
                 Main.stage.setScene(Main.Mainmenu.scene);
-                level1BgmPlayer.stop();
             }
         }));
         tl.play();
