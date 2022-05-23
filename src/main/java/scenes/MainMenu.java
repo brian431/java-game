@@ -24,7 +24,6 @@ public class MainMenu {
     ImageView Title = new ImageView(TitleImage);
 
     public MainMenu() throws IOException {
-        System.out.println("good");
         pane = new Pane();
         Title.relocate(250,75);
         pane.getChildren().add(Title);
