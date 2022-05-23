@@ -183,7 +183,8 @@ public class Player {
         if (Main.KeyCodes.getOrDefault(KeyCode.SPACE, false) && canJump) {
             verticalSpeed = -jumpHeight;
             canJump = false;
-            File file = new File("src\\main\\resources\\jump2.flac");
+            System.out.println("22");
+            File file = new File("src\\main\\resources\\dash.wav");
             Media media = new Media(file.toURI().toString());
             MediaPlayer Player = new MediaPlayer(media);
             Player.play();

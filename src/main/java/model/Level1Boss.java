@@ -411,6 +411,10 @@ public class Level1Boss {
             playTransformAnimation();
         } else if (phase == 2 && !phase2ing) {
             canShoot = false;
+            File file = new File("src\\main\\resources\\monster2.wav");
+            Media media = new Media(file.toURI().toString());
+            MediaPlayer Player = new MediaPlayer(media);
+            Player.play();
             startPhase2Cycle();
         }
 

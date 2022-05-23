@@ -98,7 +98,7 @@ public class MainMenu {
             public void handle(MouseEvent mouseEvent) {
 
                 mediaPlayer.stop();
-                file = new File("src\\main\\resources\\pushbuttom.wav");
+//                file = new File("src\\main\\resources\\pushbuttom.wav");
                 media = new Media(file.toURI().toString());
                 mediaPlayer = new MediaPlayer(media);
                 mediaPlayer.play();
