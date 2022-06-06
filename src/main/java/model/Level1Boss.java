@@ -65,6 +65,7 @@ public class Level1Boss {
     public boolean transforming = true;
     public boolean calledT1 = false;
     public boolean readying = false;
+    public boolean canRoar = true;
 
     public File file;
     public Media media;
@@ -315,6 +316,7 @@ public class Level1Boss {
                 if (facingRight) bossImageView.setRotate(180);
                 else bossImageView.setRotate(0);
                 bossImageView.setImage(new Image("level1BossPhase0-6.png"));
+                canRoar = true;
                 readying = false;
             }
         }));
@@ -395,6 +397,13 @@ public class Level1Boss {
             calledT1 = false;
         }
         if(readying) {
+            if(canRoar) {
+                File file = new File("src\\main\\resources\\monster2.wav");
+                Media media = new Media(file.toURI().toString());
+                MediaPlayer Player = new MediaPlayer(media);
+                Player.play();
+                canRoar = false;
+            }
             playReadyToMoveAnimation();
         }
         if (phase == 1 && !phaseing) {
