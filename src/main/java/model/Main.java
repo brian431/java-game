@@ -19,6 +19,8 @@ public class Main extends Application {
     public static MainMenu Mainmenu;
     public static Tutorial tutorial;
 
+    public static Sattlement sattlement;
+
     static {
         try {
             Mainmenu = new MainMenu();
@@ -30,6 +32,12 @@ public class Main extends Application {
     public static HashMap<KeyCode, Boolean> KeyCodes = new HashMap<>();
     public static ArrayList<Node> standables = new ArrayList<>();
     public static ArrayList<Projectile> projectiles = new ArrayList<>();
+
+    //Settlement element
+    public static boolean win = false;
+    public static int remainHealth = 3;
+    public static long startTime;
+    public static long endTime;
 
     public static void main(String[] args) {
         launch();

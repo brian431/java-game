@@ -39,6 +39,7 @@ public class Level1 extends Level {
     public Player player;
     public Level1Boss boss;
     public boolean playingLose = false;
+    public boolean playingWin = false;
     public File file;
     public Media media;
     public MediaPlayer level1BgmPlayer;
@@ -48,6 +49,8 @@ public class Level1 extends Level {
 
 
     public Level1() {
+
+        Main.remainHealth = 3;
 
         healthBar = new Rectangle(160, 40, 1000, 10);
         rootPane = new Pane();
@@ -136,6 +139,7 @@ public class Level1 extends Level {
             public void handle(ActionEvent actionEvent) {
                 rootPane.getChildren().remove(goImage);
                 setScene();
+                Main.startTime = System.currentTimeMillis();
             }
         }));
         tl2.play();
@@ -192,6 +196,13 @@ public class Level1 extends Level {
             playingLose = true;
             mainTimer.stop();
         }
+
+        if(boss.hp == 0 && !playingWin){
+            win();
+            playingWin = true;
+            mainTimer.stop();
+        }
+
     }
 
     public void startLoseAnimation() {
@@ -202,6 +213,8 @@ public class Level1 extends Level {
         lose.setTranslateX(200);
         lose.setTranslateY(300);
         rootPane.getChildren().add(lose);
+        Main.win = false;
+        Main.endTime = System.currentTimeMillis();
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(2000), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -210,9 +223,35 @@ public class Level1 extends Level {
                 Main.KeyCodes = new HashMap<>();
                 Main.projectiles = new ArrayList<>();
                 Main.level1 = null;
-                Main.stage.setScene(Main.Mainmenu.scene);
+                Main.stage.setScene(Main.sattlement.scene);
             }
         }));
         tl.play();
+    }
+
+    public void win(){
+        level1BgmPlayer.stop();
+        Label lose = new Label("YOU WIN");
+        lose.setFont(new Font("Arial", 200));
+        lose.setTextFill(Paint.valueOf("FFFFFF"));
+        lose.setTranslateX(200);
+        lose.setTranslateY(300);
+        rootPane.getChildren().add(lose);
+        Main.win = true;
+        Main.endTime = System.currentTimeMillis();
+
+        Timeline tl = new Timeline(new KeyFrame(Duration.millis(2000), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                rootPane.getChildren().remove(lose);
+                Main.standables.remove(mainFloor);
+                Main.KeyCodes = new HashMap<>();
+                Main.projectiles = new ArrayList<>();
+                Main.level1 = null;
+                Main.stage.setScene(Main.sattlement.scene);
+            }
+        }));
+        tl.play();
+
     }
 }
