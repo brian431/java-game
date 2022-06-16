@@ -1,9 +1,12 @@
 package scenes;
 
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -52,7 +55,7 @@ public class Settlement {
         int minutes = Math.round(playTime/60);
 
         Label playTimeText = new Label("playTime: " + Integer.toString(minutes) + "min. " + Integer.toString((int)(playTime-60*minutes)) + "sec.");
-        playTimeText.setFont(new Font("Arial", 30));
+        playTimeText.setFont(new Font("Verdana", 30));
         playTimeText.setTextFill(Paint.valueOf("FFFFFF"));
         playTimeText.setTranslateX(389);
         playTimeText.setTranslateY(254);
@@ -75,14 +78,36 @@ public class Settlement {
                 pane.getChildren().add(star2);
                 Main.remainHealth--;
             }
-            if(Main.remainHealth > 0){
+            if (Main.remainHealth > 0) {
                 ImageView star3 = new ImageView(new Image("star.png"));
                 star3.setPreserveRatio(true);
                 star3.setFitHeight(30);
-                star3.relocate(300,100);
+                star3.relocate(300, 100);
                 pane.getChildren().add(star3);
             }
         }
+
+        Button menu = new Button("Menu");
+        menu.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Main.sattlement = null;
+                Main.stage.setScene(Main.Mainmenu.scene);
+            }
+        });
+
+        Button replay = new Button("replay");
+        menu.relocate(500, 500);
+        replay.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Main.sattlement = null;
+                Main.level1 = new Level1();
+                Main.stage.setScene(Main.level1.scene);
+            }
+        });
+        replay.relocate(600, 500);
+        pane.getChildren().addAll(menu, replay);
 
         scene = new Scene(pane, WIDTH, Height);
     }

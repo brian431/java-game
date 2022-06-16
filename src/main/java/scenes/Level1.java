@@ -138,7 +138,7 @@ public class Level1 extends Level {
             public void handle(ActionEvent actionEvent) {
                 rootPane.getChildren().remove(goImage);
                 setScene();
-                Main.remainHealth = 2;
+                Main.remainHealth = 3;
             }
         }));
         tl2.play();
@@ -196,7 +196,7 @@ public class Level1 extends Level {
             mainTimer.stop();
         }
 
-        if(boss.hp == 0 && !playingWin){
+        if (boss.hp <= 0 && !playingWin) {
             win();
             playingWin = true;
             mainTimer.stop();

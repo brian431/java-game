@@ -61,7 +61,6 @@ public class Player {
     public Timeline invincibleCd;
 
 
-
     public ImageView playerImageView;
 
     public Level myLevel;

@@ -196,7 +196,7 @@ public class Level1Boss {
     }
 
     public void moveLeft() {
-        if(phase == 2) moveTime = moveTime2;
+        if (phase == 2) moveTime = moveTime2;
         int jumpOrNot = random.nextInt(3);
         TranslateTransition tt = new TranslateTransition();
         tt.setDuration(Duration.millis(moveTime));
@@ -227,7 +227,7 @@ public class Level1Boss {
     }
 
     public void moveRight() {
-        if(phase == 2) moveTime = moveTime2;
+        if (phase == 2) moveTime = moveTime2;
         int jumpOrNot = random.nextInt(3);
         TranslateTransition tt = new TranslateTransition();
         tt.setDuration(Duration.millis(moveTime));
@@ -306,7 +306,7 @@ public class Level1Boss {
             frame0 = 0;
         }
         //if(readySpriteNum == 4 && bossImageView.getTranslateY() == 453) bossImageView.setTranslateY(403);
-        if(readySpriteNum <= 8) {
+        if (readySpriteNum <= 8) {
             String s = "level1BossReady-" + (readySpriteNum + 1) + ".png";
             bossImageView.setImage(new Image(s));
         }
@@ -396,8 +396,8 @@ public class Level1Boss {
             phase = 0;
             calledT1 = false;
         }
-        if(readying) {
-            if(canRoar) {
+        if (readying) {
+            if (canRoar) {
                 File file = new File("src\\main\\resources\\monster2.wav");
                 Media media = new Media(file.toURI().toString());
                 MediaPlayer Player = new MediaPlayer(media);
