@@ -20,7 +20,7 @@ public class Main extends Application {
     public static MainMenu Mainmenu;
     public static Tutorial tutorial;
 
-    public static Settlement sattlement;
+    public static Settlement settlement;
     public static HashMap<KeyCode, Boolean> KeyCodes = new HashMap<>();
     public static ArrayList<Node> standables = new ArrayList<>();
     public static ArrayList<Projectile> projectiles = new ArrayList<>();

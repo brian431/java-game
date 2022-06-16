@@ -223,8 +223,8 @@ public class Level1 extends Level {
                 Main.KeyCodes = new HashMap<>();
                 Main.projectiles = new ArrayList<>();
                 Main.level1 = null;
-                Main.sattlement = new Settlement();
-                Main.stage.setScene(Main.sattlement.scene);
+                Main.settlement = new Settlement();
+                Main.stage.setScene(Main.settlement.scene);
             }
         }));
         tl.play();
@@ -250,8 +250,8 @@ public class Level1 extends Level {
                 Main.KeyCodes = new HashMap<>();
                 Main.projectiles = new ArrayList<>();
                 Main.level1 = null;
-                Main.sattlement = new Settlement();
-                Main.stage.setScene(Main.sattlement.scene);
+                Main.settlement = new Settlement();
+                Main.stage.setScene(Main.settlement.scene);
             }
         }));
         tl.play();

@@ -3,6 +3,7 @@ package scenes;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -10,7 +11,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import model.Main;
 
@@ -27,11 +27,9 @@ public class Settlement {
     public Media media;
     public MediaPlayer mediaPlayer;
 
-    public Settlement(){
+    public Settlement() {
 
         pane = new Pane();
-
-        pane.setBackground(new Background(new BackgroundImage(new Image("MainMenu.png"), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT)));
 
         ImageView title = new ImageView();
 
@@ -42,71 +40,89 @@ public class Settlement {
 //        Main.remainHealth = 3;
         System.out.println(Main.startTime);
         System.out.println(Main.endTime);
-        if(Main.win){
+        if (Main.win) {
+            pane.setBackground(new Background(new BackgroundImage(new Image("stage_clear.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)));
             title.setImage(new Image("win.png"));
-            title.relocate(389,205);
-        }else{
-            title.setImage(new Image("lose.png"));
-            title.relocate(389,234);
+            title.setPreserveRatio(true);
+            title.setFitHeight(260);
+            title.relocate(389, 230);
+        } else {
+            pane.setBackground(new Background(new BackgroundImage(new Image("stage_lose.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)));
+//            title.setImage(new Image("lose.png"));
+//            title.relocate(389,234);
         }
         pane.getChildren().add(title);
 
-        int playTime =(int)(Main.endTime-Main.startTime)/1000;
-        int minutes = Math.round(playTime/60);
+        int playTime = (int) (Main.endTime - Main.startTime) / 1000;
+        int minutes = Math.round(playTime / 60);
 
-        Label playTimeText = new Label("playTime: " + Integer.toString(minutes) + "min. " + Integer.toString((int)(playTime-60*minutes)) + "sec.");
+        Label playTimeText = new Label("playTime: " + Integer.toString(minutes) + "min. " + Integer.toString((int) (playTime - 60 * minutes)) + "sec.");
         playTimeText.setFont(new Font("Verdana", 30));
-        playTimeText.setTextFill(Paint.valueOf("FFFFFF"));
-        playTimeText.setTranslateX(389);
-        playTimeText.setTranslateY(254);
+        //playTimeText.setTextFill(Paint.valueOf("FFFFFF"));
+        if (Main.win)
+            playTimeText.relocate(500, 550);
+        else
+            playTimeText.relocate(500, 350);
+
         pane.getChildren().add(playTimeText);
 
-        if(Main.win){
-            if(Main.remainHealth > 0){
+        if (Main.win) {
+            if (Main.remainHealth > 0) {
                 ImageView star1 = new ImageView(new Image("star.png"));
                 star1.setPreserveRatio(true);
-                star1.setFitHeight(30);
-                star1.relocate(100,100);
+                star1.setFitHeight(70);
+                star1.relocate(400, 150);
                 pane.getChildren().add(star1);
                 Main.remainHealth--;
             }
-            if(Main.remainHealth > 0){
+            if (Main.remainHealth > 0) {
                 ImageView star2 = new ImageView(new Image("star.png"));
                 star2.setPreserveRatio(true);
-                star2.setFitHeight(30);
-                star2.relocate(200,100);
+                star2.setFitHeight(100);
+                star2.relocate(631, 60);
                 pane.getChildren().add(star2);
                 Main.remainHealth--;
             }
             if (Main.remainHealth > 0) {
                 ImageView star3 = new ImageView(new Image("star.png"));
                 star3.setPreserveRatio(true);
-                star3.setFitHeight(30);
-                star3.relocate(300, 100);
+                star3.setFitHeight(70);
+                star3.relocate(862, 150);
                 pane.getChildren().add(star3);
             }
         }
 
-        Button menu = new Button("Menu");
+        Button menu = new Button();
         menu.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Main.sattlement = null;
+                Main.settlement = null;
                 Main.stage.setScene(Main.Mainmenu.scene);
             }
         });
+        ImageView menuPicture = new ImageView(new Image("menu.png"));
+        menuPicture.setPreserveRatio(true);
+        menuPicture.setFitHeight(48);
+        menu.setGraphic(menuPicture);
+        menu.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        menu.setStyle("-fx-background-color: transparent");
+        menu.relocate(1268, 650);
 
-        Button replay = new Button("replay");
-        menu.relocate(500, 500);
+        Button replay = new Button();
         replay.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Main.sattlement = null;
+                Main.settlement = null;
                 Main.level1 = new Level1();
                 Main.stage.setScene(Main.level1.scene);
             }
         });
-        replay.relocate(600, 500);
+        ImageView replayPicture = new ImageView(new Image("replay.png"));
+        replayPicture.setPreserveRatio(true);
+        replayPicture.setFitHeight(48);
+        replay.setGraphic(replayPicture);
+        replay.setStyle("-fx-background-color: transparent");
+        replay.relocate(0, 650);
         pane.getChildren().addAll(menu, replay);
 
         scene = new Scene(pane, WIDTH, Height);
