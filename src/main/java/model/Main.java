@@ -12,14 +12,14 @@ import java.util.HashMap;
 public class Main extends Application {
 
     public static Stage stage;
-    public static StageSelect menu = new StageSelect();
+//    public static StageSelect menu = new StageSelect();
     public static Level1 level1;
     public static Level2 level2;
     public static Level3 level3;
     public static MainMenu Mainmenu;
     public static Tutorial tutorial;
 
-    public static Sattlement sattlement;
+    public static Settlement sattlement;
 
     static {
         try {
@@ -34,7 +34,7 @@ public class Main extends Application {
     public static ArrayList<Projectile> projectiles = new ArrayList<>();
 
     //Settlement element
-    public static boolean win = false;
+    public static boolean win = Boolean.FALSE;
     public static int remainHealth = 3;
     public static long startTime;
     public static long endTime;

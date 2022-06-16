@@ -325,8 +325,8 @@ public class Player {
     }
 
     public void update() {
-        if(!onTutorial)
-        detectBadThings();
+//        if(!onTutorial)
+//            detectBadThings();
         movePlayer();
         if (isRunning) {
             ++frame;

@@ -50,8 +50,6 @@ public class Level1 extends Level {
 
     public Level1() {
 
-        Main.remainHealth = 3;
-
         healthBar = new Rectangle(160, 40, 1000, 10);
         rootPane = new Pane();
         scene = new Scene(rootPane, WIDTH, HEIGHT);
@@ -74,6 +72,7 @@ public class Level1 extends Level {
             }
         };
 
+        Main.startTime = System.currentTimeMillis();
         mainTimer.start();
         setPreScene();
         startReadyAnimation();
@@ -139,7 +138,7 @@ public class Level1 extends Level {
             public void handle(ActionEvent actionEvent) {
                 rootPane.getChildren().remove(goImage);
                 setScene();
-                Main.startTime = System.currentTimeMillis();
+                Main.remainHealth = 2;
             }
         }));
         tl2.play();
@@ -223,6 +222,7 @@ public class Level1 extends Level {
                 Main.KeyCodes = new HashMap<>();
                 Main.projectiles = new ArrayList<>();
                 Main.level1 = null;
+                Main.sattlement = new Settlement();
                 Main.stage.setScene(Main.sattlement.scene);
             }
         }));
@@ -248,6 +248,7 @@ public class Level1 extends Level {
                 Main.KeyCodes = new HashMap<>();
                 Main.projectiles = new ArrayList<>();
                 Main.level1 = null;
+                Main.sattlement = new Settlement();
                 Main.stage.setScene(Main.sattlement.scene);
             }
         }));
