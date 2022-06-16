@@ -217,6 +217,7 @@ public class Level1 extends Level {
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(2000), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                mainTimer.stop();
                 rootPane.getChildren().remove(lose);
                 Main.standables.remove(mainFloor);
                 Main.KeyCodes = new HashMap<>();
@@ -243,6 +244,7 @@ public class Level1 extends Level {
         Timeline tl = new Timeline(new KeyFrame(Duration.millis(2000), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                mainTimer.stop();
                 rootPane.getChildren().remove(lose);
                 Main.standables.remove(mainFloor);
                 Main.KeyCodes = new HashMap<>();
