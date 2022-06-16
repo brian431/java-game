@@ -15,6 +15,7 @@ import javafx.scene.text.Font;
 import model.Main;
 
 import java.io.File;
+import java.io.IOException;
 
 public class Settlement {
 
@@ -38,15 +39,27 @@ public class Settlement {
 //        Main.endTime = 123356;
 //        Main.win = true;
 //        Main.remainHealth = 3;
-        System.out.println(Main.startTime);
-        System.out.println(Main.endTime);
+//        System.out.println(Main.startTime);
+//        System.out.println(Main.endTime);
         if (Main.win) {
+            file = new File("src\\main\\resources\\win_bgm.mp3");
+            media = new Media(file.toURI().toString());
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            mediaPlayer.setVolume(0.4);
+            mediaPlayer.play();
             pane.setBackground(new Background(new BackgroundImage(new Image("stage_clear.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)));
             title.setImage(new Image("win.png"));
             title.setPreserveRatio(true);
             title.setFitHeight(260);
             title.relocate(389, 230);
         } else {
+            file = new File("src\\main\\resources\\lose_bgm.mp3");
+            media = new Media(file.toURI().toString());
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            mediaPlayer.setVolume(0.4);
+            mediaPlayer.play();
             pane.setBackground(new Background(new BackgroundImage(new Image("stage_lose.png"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)));
 //            title.setImage(new Image("lose.png"));
 //            title.relocate(389,234);
@@ -96,7 +109,13 @@ public class Settlement {
         menu.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                mediaPlayer.stop();
                 Main.settlement = null;
+                try {
+                    Main.Mainmenu = new MainMenu();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 Main.stage.setScene(Main.Mainmenu.scene);
             }
         });
@@ -112,6 +131,7 @@ public class Settlement {
         replay.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                mediaPlayer.stop();
                 Main.settlement = null;
                 Main.level1 = new Level1();
                 Main.stage.setScene(Main.level1.scene);

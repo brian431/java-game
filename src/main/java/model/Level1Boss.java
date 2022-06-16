@@ -401,6 +401,7 @@ public class Level1Boss {
                 File file = new File("src\\main\\resources\\monster2.wav");
                 Media media = new Media(file.toURI().toString());
                 MediaPlayer Player = new MediaPlayer(media);
+                Player.setVolume(0.5);
                 Player.play();
                 canRoar = false;
             }

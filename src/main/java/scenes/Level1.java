@@ -58,7 +58,6 @@ public class Level1 extends Level {
         scene.setOnKeyReleased(keyEvent -> Main.KeyCodes.put(keyEvent.getCode(), false));
         scene.setOnMousePressed(e -> Main.KeyCodes.put(KeyCode.J, true));
         scene.setOnMouseReleased(e -> Main.KeyCodes.put(KeyCode.J, false));
-
         file = new File("src\\main\\resources\\bgmlevel1.wav");
         media = new Media(file.toURI().toString());
         level1BgmPlayer = new MediaPlayer(media);

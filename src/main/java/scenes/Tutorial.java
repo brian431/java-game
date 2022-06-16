@@ -15,6 +15,7 @@ import model.Main;
 import model.Player;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -60,7 +61,11 @@ public class Tutorial extends Level{
         mainTimer = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                update();
+                try {
+                    update();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         };
 
@@ -85,7 +90,7 @@ public class Tutorial extends Level{
         container.setFill(Color.TRANSPARENT);
         pane.getChildren().add(container);
     }
-    public void update(){
+    public void update() throws IOException {
         player.update();
         for (int i = 0; i < projectiles.size(); ++i) {
             projectiles.get(i).move();
@@ -99,7 +104,7 @@ public class Tutorial extends Level{
         }
         start();
     }
-    public void start(){
+    public void start() throws IOException {
         if(sum == 0){
             label.setText("D 向右");
             if(Main.KeyCodes.getOrDefault(KeyCode.D, false)){
@@ -194,6 +199,7 @@ public class Tutorial extends Level{
                 Main.KeyCodes = new HashMap<>();
                 Main.projectiles = new ArrayList<>();
                 Main.tutorial = null;
+                Main.Mainmenu = new MainMenu();
                 Main.stage.setScene(Main.Mainmenu.scene);
                 sum = 0;
             }

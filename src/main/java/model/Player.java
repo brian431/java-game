@@ -185,6 +185,7 @@ public class Player {
             File file = new File("src\\main\\resources\\jump2.mp3");
             Media media = new Media(file.toURI().toString());
             MediaPlayer Player = new MediaPlayer(media);
+            Player.setVolume(0.5);
             Player.play();
 
         }
@@ -195,6 +196,7 @@ public class Player {
                 File file = new File("src\\main\\resources\\dash.wav");
                 Media media = new Media(file.toURI().toString());
                 MediaPlayer Player = new MediaPlayer(media);
+                Player.setVolume(0.7);
                 Player.play();
 
                 dash();
@@ -302,6 +304,7 @@ public class Player {
                 File file = new File("src\\main\\resources\\getdamage.wav");
                 Media media = new Media(file.toURI().toString());
                 MediaPlayer Player = new MediaPlayer(media);
+                Player.setVolume(0.5);
                 Player.play();
 
                 Main.remainHealth--;
@@ -318,6 +321,7 @@ public class Player {
             File file = new File("src\\main\\resources\\getdamage.wav");
             Media media = new Media(file.toURI().toString());
             MediaPlayer Player = new MediaPlayer(media);
+            Player.setVolume(0.5);
             Player.play();
 
             Main.remainHealth--;

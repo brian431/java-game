@@ -43,7 +43,6 @@ public class MainMenu {
         scene = new Scene(pane, WIDTH, Height);
         createVBox();
         pane.getChildren().add(Vbox);
-
         //media
         file = new File("src\\main\\resources\\bgmmenu.mp3");
         media = new Media(file.toURI().toString());
@@ -100,6 +99,7 @@ public class MainMenu {
                 file = new File("src\\main\\resources\\pushbuttom.wav");
                 media = new Media(file.toURI().toString());
                 mediaPlayer = new MediaPlayer(media);
+                mediaPlayer.setVolume(0.5);
                 mediaPlayer.play();
 
                 Timeline tl = new Timeline(new KeyFrame(Duration.millis(500), new EventHandler<ActionEvent>() {
