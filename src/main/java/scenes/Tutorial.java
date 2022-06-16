@@ -197,6 +197,7 @@ public class Tutorial extends Level{
         }
         if(sum == 9){
             if (Main.KeyCodes.getOrDefault(KeyCode.ESCAPE, false)) {
+                mainTimer.stop();
                 level1BgmPlayer.stop();
                 Main.standables.remove(mainFloor);
                 Main.KeyCodes = new HashMap<>();
