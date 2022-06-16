@@ -320,6 +320,8 @@ public class Player {
             MediaPlayer Player = new MediaPlayer(media);
             Player.play();
 
+            Main.remainHealth--;
+
             invincible = true;
             invincibleCd.play();
         }
