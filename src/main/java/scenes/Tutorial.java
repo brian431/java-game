@@ -1,20 +1,31 @@
 package scenes;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.util.Duration;
+import model.Level1Boss;
 import model.Main;
 import model.Player;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import static model.Main.projectiles;
 
@@ -179,9 +190,20 @@ public class Tutorial extends Level{
             label.setVisible(true);
             if (Main.KeyCodes.getOrDefault(KeyCode.R, false)) {
                 label.setFont(new Font("Verdana", 100));
-                label.relocate(500,60);
-                label.setText("完成教學!!!");
+                label.relocate(200,60);
+                label.setText("完成教學!!!(按Esc退出)");
                 sum++;
+            }
+        }
+        if(sum == 9){
+            if (Main.KeyCodes.getOrDefault(KeyCode.ESCAPE, false)) {
+                level1BgmPlayer.stop();
+                Main.standables.remove(mainFloor);
+                Main.KeyCodes = new HashMap<>();
+                Main.projectiles = new ArrayList<>();
+                Main.tutorial = null;
+                Main.stage.setScene(Main.Mainmenu.scene);
+                sum = 0;
             }
         }
     }
