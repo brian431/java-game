@@ -169,7 +169,7 @@ public class Level1 extends Level {
         boss.update();
         label1.setFont(new Font("Times New Roman", 200));
         label1.setTextFill(Paint.valueOf("FFFFFF"));
-        label1.setText("" + boss.readySpriteNum);
+        //label1.setText("" + boss.readySpriteNum);
 
         /** add and remove projectiles*/
         for (int i = 0; i < projectiles.size(); ++i) {

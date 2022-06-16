@@ -277,7 +277,7 @@ public class Level1Boss {
                         (Main.projectiles.get(i).type.equals("playerBullet") || Main.projectiles.get(i).type.equals("shotgunBullet") || Main.projectiles.get(i).type.equals("trackBullet"))) {
                     Main.level1.rootPane.getChildren().remove(Main.projectiles.get(i).projectileImage);
                     Main.projectiles.remove(i);
-                    hp -= 5;
+                    hp -= 95;
                     file = new File("src\\main\\resources\\bullet2.wav");
                     media = new Media(file.toURI().toString());
                     Player = new MediaPlayer(media);
@@ -419,10 +419,6 @@ public class Level1Boss {
             playTransformAnimation();
         } else if (phase == 2 && !phase2ing) {
             canShoot = false;
-            File file = new File("src\\main\\resources\\monster2.wav");
-            Media media = new Media(file.toURI().toString());
-            MediaPlayer Player = new MediaPlayer(media);
-            Player.play();
             startPhase2Cycle();
         }
 
