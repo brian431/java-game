@@ -2,6 +2,7 @@ package scenes;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
@@ -9,6 +10,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import model.Main;
 import model.Player;
 
@@ -27,7 +29,9 @@ public class Tutorial extends Level{
     public File file;
     public Media media;
     public MediaPlayer level1BgmPlayer;
+    public Label label;
     AnimationTimer mainTimer;
+    public int sum = 0;
 
     public Tutorial(){
 
@@ -45,6 +49,12 @@ public class Tutorial extends Level{
         level1BgmPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         level1BgmPlayer.play();
 
+        label = new Label();
+        label.setText("");
+        label.setFont(new Font("Verdana", 100));
+        label.relocate(500,60);
+        pane.getChildren().add(label);
+
         mainTimer = new AnimationTimer() {
             @Override
             public void handle(long l) {
@@ -54,7 +64,6 @@ public class Tutorial extends Level{
 
         mainTimer.start();
         init();
-
 
     }
     public void init(){
@@ -86,13 +95,95 @@ public class Tutorial extends Level{
                 projectiles.remove(i);
             }
         }
+        start();
     }
     public void start(){
-        //
-
-    }
-    public void end(){
-
-        //
+        if(sum == 0){
+            label.setText("D 向右");
+            if(Main.KeyCodes.getOrDefault(KeyCode.D, false)){
+                label.setVisible(false);
+                label.setText("");
+                sum++;
+            }
+        }
+        if(sum == 1){
+            label.setText("A 向左");
+            label.setVisible(true);
+            if(Main.KeyCodes.getOrDefault(KeyCode.A, false)){
+                label.setVisible(false);
+                label.setText("");
+                sum++;
+            }
+        }
+        if(sum == 2){
+            label.relocate(400,60);
+            label.setText("SHIFT 衝刺");
+            label.setVisible(true);
+            if(Main.KeyCodes.getOrDefault(KeyCode.SHIFT, false)){
+                label.setVisible(false);
+                label.setText("");
+                sum++;
+            }
+        }
+        if(sum == 3){
+            label.setText("SPACE 跳躍");
+            label.setVisible(true);
+            if(Main.KeyCodes.getOrDefault(KeyCode.SPACE, false)){
+                label.setVisible(false);
+                label.setText("");
+                sum++;
+            }
+        }
+        if(sum == 4){
+            label.relocate(350,60);
+            label.setText("J或滑鼠左鍵 射擊");
+            label.setVisible(true);
+            if(Main.KeyCodes.getOrDefault(KeyCode.J,false)){
+                label.setVisible(false);
+                label.setText("");
+                sum++;
+            }
+        }
+        if (sum == 5) {
+            label.setText("W+J 向上射擊");
+            label.setVisible(true);
+            if(Main.KeyCodes.getOrDefault(KeyCode.W,false) && Main.KeyCodes.getOrDefault(KeyCode.J,false)){
+                label.setVisible(false);
+                label.setText("");
+                sum++;
+            }
+        }
+        if(sum == 6){
+            label.relocate(300,60);
+            label.setText("D+W+J 向右上射擊");
+            label.setVisible(true);
+            if(Main.KeyCodes.getOrDefault(KeyCode.W,false) && Main.KeyCodes.getOrDefault(KeyCode.J,false) && Main.KeyCodes.getOrDefault(KeyCode.D,false)){
+                label.setVisible(false);
+                label.setText("");
+                sum++;
+            }
+        }
+        if(sum == 7){
+            label.setText("A+W+J 向左上射擊");
+            label.setVisible(true);
+            if(Main.KeyCodes.getOrDefault(KeyCode.W,false) && Main.KeyCodes.getOrDefault(KeyCode.J,false) && Main.KeyCodes.getOrDefault(KeyCode.A,false)){
+                label.setVisible(false);
+                label.setText("");
+                sum++;
+            }
+        }
+        if(sum == 8) {
+            label.setFont(new Font("Verdana", 75));
+            label.relocate(75,60);
+            label.setText("R 切槍(三種型態:一般，散彈，追蹤)");
+            label.setVisible(true);
+            if (Main.KeyCodes.getOrDefault(KeyCode.R, false)) {
+                label.setFont(new Font("Verdana", 100));
+                label.relocate(500,60);
+                label.setText("完成教學!!!");
+                sum++;
+            }
+        }
     }
 }
+
